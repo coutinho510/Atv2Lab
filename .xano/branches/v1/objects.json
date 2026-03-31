@@ -183,7 +183,7 @@
     "id": 753410,
     "type": "table",
     "path": "tables/753410_account.xs",
-    "status": "unchanged",
+    "status": "changed",
     "staged": false,
     "sha256": "8e376e08136112bc94b02d32a1c2910d2e9aa5f0ee417d6d924ffbac05988650",
     "original": "Ly8gU3RvcmVzIGluZm9ybWF0aW9uIGFib3V0IGFjY291bnRzIHRoYXQgdXNlcnMgYmVsb25nIHRvCnRhYmxlIGFjY291bnQgewogIGF1dGggPSBmYWxzZQoKICBzY2hlbWEgewogICAgaW50IGlkCiAgICB0aW1lc3RhbXAgY3JlYXRlZF9hdD89bm93IHsKICAgICAgdmlzaWJpbGl0eSA9ICJwcml2YXRlIgogICAgfQogIAogICAgLy8gVGhlIG5hbWUgb2YgdGhlIGNvbXBhbnkuCiAgICB0ZXh0IG5hbWU/IGZpbHRlcnM9dHJpbQogIAogICAgLy8gQSBicmllZiBkZXNjcmlwdGlvbiBvZiB0aGUgY29tcGFueS4KICAgIHRleHQgZGVzY3JpcHRpb24/IGZpbHRlcnM9dHJpbQogIAogICAgdGV4dCBsb2NhdGlvbj8gZmlsdGVycz10cmltCiAgfQoKICBpbmRleCA9IFsKICAgIHt0eXBlOiAicHJpbWFyeSIsIGZpZWxkOiBbe25hbWU6ICJpZCJ9XX0KICAgIHt0eXBlOiAiZ2luIiwgZmllbGQ6IFt7bmFtZTogInhkbyIsIG9wOiAianNvbmJfcGF0aF9vcCJ9XX0KICAgIHt0eXBlOiAiYnRyZWUiLCBmaWVsZDogW3tuYW1lOiAiY3JlYXRlZF9hdCIsIG9wOiAiZGVzYyJ9XX0KICBdCgogIHRhZ3MgPSBbInhhbm86cXVpY2stc3RhcnQiXQp9"
@@ -201,7 +201,7 @@
     "id": 753413,
     "type": "table",
     "path": "tables/753413_agent_message.xs",
-    "status": "unchanged",
+    "status": "changed",
     "staged": false,
     "sha256": "6dc2ab8673aa7822707345f7740ae91d610ed6636de087d4f6da5845f45e67f1",
     "original": "Ly8gU3RvcmVzIGluZGl2aWR1YWwgbWVzc2FnZXMgd2l0aGluIGNvbnZlcnNhdGlvbiB0aHJlYWRzLgp0YWJsZSBhZ2VudF9tZXNzYWdlIHsKICBhdXRoID0gZmFsc2UKCiAgc2NoZW1hIHsKICAgIGludCBpZAogICAgdGltZXN0YW1wIGNyZWF0ZWRfYXQ/PW5vdyB7CiAgICAgIHZpc2liaWxpdHkgPSAicHJpdmF0ZSIKICAgIH0KICAKICAgIC8vIFJlZmVyZW5jZSB0byB0aGUgcGFyZW50IGNvbnZlcnNhdGlvbiB0aHJlYWQuCiAgICBpbnQgY29udmVyc2F0aW9uPyB7CiAgICAgIHRhYmxlID0gImFnZW50X2NvbnZlcnNhdGlvbiIKICAgIH0KICAKICAgIC8vIFRoZSByb2xlIG9mIHRoZSBtZXNzYWdlIHNlbmRlciAoZS5nLiwgc3lzdGVtLCB1c2VyLCBhc3Npc3RhbnQsIHRvb2wpLgogICAgZW51bSByb2xlPyB7CiAgICAgIHZhbHVlcyA9IFsic3lzdGVtIiwgInVzZXIiLCAiYXNzaXN0YW50IiwgInRvb2wiXQogICAgfQogIAogICAgLy8gVGhlIGNvbnRlbnQgb2YgdGhlIG1lc3NhZ2UsIGNvbXBhdGlibGUgd2l0aCBBSSBTREsuCiAgICBqc29uIGNvbnRlbnQ/CiAgfQoKICBpbmRleCA9IFsKICAgIHt0eXBlOiAicHJpbWFyeSIsIGZpZWxkOiBbe25hbWU6ICJpZCJ9XX0KICAgIHt0eXBlOiAiZ2luIiwgZmllbGQ6IFt7bmFtZTogInhkbyIsIG9wOiAianNvbmJfcGF0aF9vcCJ9XX0KICAgIHt0eXBlOiAiYnRyZWUiLCBmaWVsZDogW3tuYW1lOiAiY3JlYXRlZF9hdCIsIG9wOiAiZGVzYyJ9XX0KICBdCgogIHRhZ3MgPSBbInhhbm86cXVpY2stc3RhcnQiXQp9"
@@ -219,7 +219,7 @@
     "id": 753409,
     "type": "table",
     "path": "tables/753409_user.xs",
-    "status": "unchanged",
+    "status": "changed",
     "staged": false,
     "sha256": "54ecb95d0adce58c9576241503174b1d7455af2036504c43040b45997b6b179a",
     "original": "Ly8gU3RvcmVzIHVzZXIgaW5mb3JtYXRpb24gYW5kIGFsbG93cyB0aGUgdXNlciB0byBhdXRoZW50aWNhdGUgIGFnYWluc3QKdGFibGUgdXNlciB7CiAgYXV0aCA9IHRydWUKCiAgc2NoZW1hIHsKICAgIGludCBpZAogICAgdGltZXN0YW1wIGNyZWF0ZWRfYXQ/PW5vdyB7CiAgICAgIHZpc2liaWxpdHkgPSAicHJpdmF0ZSIKICAgIH0KICAKICAgIHRleHQgbmFtZSBmaWx0ZXJzPXRyaW0KICAgIGVtYWlsPyBlbWFpbCBmaWx0ZXJzPXRyaW18bG93ZXIKICAgIHBhc3N3b3JkPyBwYXNzd29yZCBmaWx0ZXJzPW1pbjo4fG1pbkFscGhhOjF8bWluRGlnaXQ6MSB7CiAgICAgIHZpc2liaWxpdHkgPSAiaW50ZXJuYWwiCiAgICB9CiAgCiAgICAvLyBSZWZlcmVuY2UgdG8gdGhlIGNvbXBhbnkgdGhlIHVzZXIgYmVsb25ncyB0by4KICAgIGludCBhY2NvdW50X2lkPyB7CiAgICAgIHRhYmxlID0gImFjY291bnQiCiAgICB9CiAgCiAgICAvLyBUaGUgcm9sZSBvZiB0aGUgdXNlciB3aXRoaW4gdGhlaXIgY29tcGFueSAoZS5nLiwgJ2FkbWluJywgJ21lbWJlcicpLgogICAgZW51bSByb2xlPyB7CiAgICAgIHZhbHVlcyA9IFsiYWRtaW4iLCAibWVtYmVyIl0KICAgICAgdmlzaWJpbGl0eSA9ICJwcml2YXRlIgogICAgfQogIAogICAgb2JqZWN0IHBhc3N3b3JkX3Jlc2V0PyB7CiAgICAgIHNjaGVtYSB7CiAgICAgICAgcGFzc3dvcmQgdG9rZW4/IHsKICAgICAgICAgIHZpc2liaWxpdHkgPSAiaW50ZXJuYWwiCiAgICAgICAgfQogICAgICAKICAgICAgICB0aW1lc3RhbXA/IGV4cGlyYXRpb24/IHsKICAgICAgICAgIHZpc2liaWxpdHkgPSAiaW50ZXJuYWwiCiAgICAgICAgfQogICAgICAKICAgICAgICBib29sIHVzZWQ/IHsKICAgICAgICAgIHZpc2liaWxpdHkgPSAiaW50ZXJuYWwiCiAgICAgICAgfQogICAgICB9CiAgICB9CiAgfQoKICBpbmRleCA9IFsKICAgIHt0eXBlOiAicHJpbWFyeSIsIGZpZWxkOiBbe25hbWU6ICJpZCJ9XX0KICAgIHt0eXBlOiAiYnRyZWUiLCBmaWVsZDogW3tuYW1lOiAiY3JlYXRlZF9hdCIsIG9wOiAiZGVzYyJ9XX0KICAgIHt0eXBlOiAiYnRyZWV8dW5pcXVlIiwgZmllbGQ6IFt7bmFtZTogImVtYWlsIiwgb3A6ICJhc2MifV19CiAgXQoKICB0YWdzID0gWyJ4YW5vOnF1aWNrLXN0YXJ0Il0KfQ=="
@@ -273,9 +273,156 @@
     "id": 109621,
     "type": "addon",
     "path": "addons/109621_user.xs",
-    "status": "changed",
+    "status": "unchanged",
     "staged": false,
-    "sha256": "65de1d3c3a5e8357602530b6e2b3a4335fdb06f06ff3b085ea20085eb80fa1ca",
-    "original": "YWRkb24gdXNlciB7CiAgaW5wdXQgewogICAgaW50IHVzZXJfaWQ/IHsKICAgICAgdGFibGUgPSAidXNlciIKICAgIH0KICB9CgogIHN0YWNrIHsKICAgIGRiLnF1ZXJ5IHVzZXIgewogICAgICB3aGVyZSA9ICRkYi51c2VyLmlkID09ICRpbnB1dC51c2VyX2lkCiAgICAgIHJldHVybiA9IHt0eXBlOiAic2luZ2xlIn0KICAgIH0KICB9Cn0="
+    "sha256": "cbd7d3aeba60a1df9950f61ac7aac269bcb7f22fe0bd32949957f0046bf7300b",
+    "original": "Ly8gbWV1IHByaW1laXJvIGNvbWVudGFyaW8gdmlhIHZTY29kZSAKYWRkb24gdXNlciB7CiAgaW5wdXQgewogICAgaW50IHVzZXJfaWQ/IHsKICAgICAgdGFibGUgPSAidXNlciIKICAgIH0KICB9CgogIHN0YWNrIHsKICAgIGRiLnF1ZXJ5ICIiIHsKICAgICAgd2hlcmUgPSAkZGIudXNlci5pZCA9PSAkaW5wdXQudXNlcl9pZAogICAgICByZXR1cm4gPSB7dHlwZTogImxpc3QifQogICAgfQogIH0KfQ=="
+  },
+  {
+    "id": 0,
+    "path": "functions/subject_management/auto_enroll_subject_creator.xs",
+    "status": "new",
+    "type": "function",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "functions/subject_management/check_subject_permission.xs",
+    "status": "new",
+    "type": "function",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "functions/subject_management/get_user_subjects.xs",
+    "status": "new",
+    "type": "function",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "functions/subject_management/log_subject_event.xs",
+    "status": "new",
+    "type": "function",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "functions/subject_management/test_access_control.xs",
+    "status": "new",
+    "type": "function",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "functions/subject_management/validate_subject.xs",
+    "status": "new",
+    "type": "function",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "tables/753414_subject.xs",
+    "status": "new",
+    "type": "table",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "tables/753415_subject_enrollment.xs",
+    "status": "new",
+    "type": "table",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "apis/subjects/api_group.xs",
+    "status": "new",
+    "type": "api_group",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "apis/subjects_enrollments/api_group.xs",
+    "status": "new",
+    "type": "api_group",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "apis/subjects/3600505_subjects_POST.xs",
+    "status": "new",
+    "type": "api_endpoint",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "apis/subjects/3600506_subjects_GET.xs",
+    "status": "new",
+    "type": "api_endpoint",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "apis/subjects/3600507_subjects_id_GET.xs",
+    "status": "new",
+    "type": "api_endpoint",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "apis/subjects/3600508_subjects_id_PATCH.xs",
+    "status": "new",
+    "type": "api_endpoint",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "apis/subjects/3600509_subjects_id_DELETE.xs",
+    "status": "new",
+    "type": "api_endpoint",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "apis/subjects_enrollments/3600510_subjects_id_enrollments_POST.xs",
+    "status": "new",
+    "type": "api_endpoint",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "apis/subjects_enrollments/3600511_subjects_id_enrollments_GET.xs",
+    "status": "new",
+    "type": "api_endpoint",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "apis/subjects_enrollments/3600512_subjects_id_enrollments_enrollment_id_PATCH.xs",
+    "status": "new",
+    "type": "api_endpoint",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "apis/subjects_enrollments/3600513_subjects_id_enrollments_enrollment_id_DELETE.xs",
+    "status": "new",
+    "type": "api_endpoint",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "addons/subject_enrolled_users_summary.xs",
+    "status": "new",
+    "type": "addon",
+    "staged": true
+  },
+  {
+    "id": 0,
+    "path": "addons/subject_enrollment_count.xs",
+    "status": "new",
+    "type": "addon",
+    "staged": true
   }
 ]
