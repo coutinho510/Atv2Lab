@@ -1,4 +1,5 @@
-// Get all subjects the user is enrolled in
+ /,
+ / Get all subjects the user is enrolled in
 query "subjects" verb=GET {
   api_group = "Subjects"
   auth = "user"

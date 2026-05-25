@@ -15,6 +15,7 @@ function "subject_management/auto_enroll_subject_creator" {
   
     // Account ID for auditing purposes
     int account_id {
+      
       table = "account"
     }
   }
