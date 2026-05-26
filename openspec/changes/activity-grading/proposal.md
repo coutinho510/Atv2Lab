@@ -1,29 +1,21 @@
+# Proposta: Funcionalidade de Notas de Atividades
+
 ## Why
 
-EduTrack AI necessita de um sistema robusto para gestão de atividades acadêmicas e avaliação de alunos. Professores precisam lançar notas para atividades específicas dentro de disciplinas, permitindo acompanhamento do desempenho estudantil. Este recurso é essencial para estabelecer um registro de grades, fornecer feedback estruturado com rubricas, e suportar futuras análises de desempenho e geração de relatórios acadêmicos.
+Atualmente, o sistema não permite que professores lancem notas para atividades específicas dos alunos. Esta funcionalidade é essencial para o acompanhamento do progresso acadêmico e para a avaliação dos estudantes nas disciplinas em que estão matriculados.
 
 ## What Changes
 
-- **Nova tabela `academic_activity`** para armazenar atividades acadêmicas dentro de disciplinas com metadados (nome, descrição, data de entrega, status)
-- **Nova tabela `activity_grade`** para registrar notas de alunos com suporte a feedback textual e rubrica
-- **Controle de acesso** permitindo que apenas professores/administradores da disciplina lancem e editem notas
-- **Visualização filtrada** onde alunos veem apenas suas próprias notas
-- **Audit trail** registrando todas as operações de atividade e avaliação
-- **Estrutura extensível** pronta para suportar submissões de alunos, anexos e histórico de correções futuro
+Para habilitar o lançamento de notas, as seguintes mudanças são propostas:
 
-## Capabilities
-
-### New Capabilities
-- `activity-management`: Professores podem criar, visualizar, atualizar e deletar atividades dentro de disciplinas com controle de acesso baseado em roles e logging de auditoria
-- `grade-management`: Instrutores podem lançar, visualizar, editar e fornecer feedback com rubricas para notas de alunos em atividades, com restrições de permissão e rastreamento de eventos
-
-### Modified Capabilities
-<!-- Nenhuma capacidade existente requer mudanças nesta fase -->
+1.  **Nova Tabela `academic_task`**: Uma nova tabela será criada para armazenar as atividades acadêmicas. Cada atividade pertencerá a uma `subject` (disciplina).
+    *   Campos: `subject_id`, `title`, `description`, `due_date`.
+2.  **Nova Tabela `activity_grade`**: Esta tabela armazenará as notas que os alunos recebem nas atividades.
+    *   Campos: `academic_task_id`, `student_id`, `grader_id` (ID do professor que deu a nota), `grade`, `comments`.
+3.  **Nova API `POST /activity_grades`**: Um novo endpoint será criado para permitir que um professor (com a permissão adequada) submeta uma nota para um aluno em uma atividade específica. A API validará se o usuário que está lançando a nota tem permissão de professor para a disciplina da atividade.
 
 ## Impact
 
-- **Database**: Novas tabelas `academic_activity` (atividades por disciplina) e `activity_grade` (notas de alunos)
-- **APIs**: Novos endpoints REST para gerenciamento de atividades (CRUD) e lançamento/visualização de notas com filtros de permissão
-- **Access Control**: Permissões baseadas em `subject_role` (instructor/admin vs learner) do `subject_enrollment`
-- **Event Logging**: Todas as operações registradas via `event_log` para auditoria (atividades criadas/atualizadas/deletadas, notas lançadas/editadas)
-- **Dependencies**: Constrói sobre estrutura existente de autenticação, `subject` e `subject_enrollment`
+-   **Backend**: Novas tabelas no banco de dados e um novo endpoint de API.
+-   **Frontend**: Nenhuma mudança de frontend está no escopo desta proposta. O foco é apenas na criação da infraestrutura de backend.
+-   **Segurança**: O novo endpoint de API incluirá validação para garantir que apenas usuários autorizados (professores da disciplina) possam lançar notas.
