@@ -273,7 +273,7 @@
     "id": 109621,
     "type": "addon",
     "path": "addons/109621_user.xs",
-    "status": "unchanged",
+    "status": "changed",
     "staged": false,
     "sha256": "cbd7d3aeba60a1df9950f61ac7aac269bcb7f22fe0bd32949957f0046bf7300b",
     "original": "Ly8gbWV1IHByaW1laXJvIGNvbWVudGFyaW8gdmlhIHZTY29kZSAKYWRkb24gdXNlciB7CiAgaW5wdXQgewogICAgaW50IHVzZXJfaWQ/IHsKICAgICAgdGFibGUgPSAidXNlciIKICAgIH0KICB9CgogIHN0YWNrIHsKICAgIGRiLnF1ZXJ5ICIiIHsKICAgICAgd2hlcmUgPSAkZGIudXNlci5pZCA9PSAkaW5wdXQudXNlcl9pZAogICAgICByZXR1cm4gPSB7dHlwZTogImxpc3QifQogICAgfQogIH0KfQ=="
