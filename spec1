@@ -1,0 +1,35 @@
+# academic_activities-api Specification
+
+## Purpose
+
+Define os endpoints da API RESTful para gerenciar atividades acadêmicas (`academic_activities`), incluindo criação, listagem, atualização e exclusão, com as devidas validações de permissão.
+
+## ADDED Requirements
+
+### Requirement: Create academic activities
+O sistema SHALL permitir que usuários autorizados criem atividades acadêmicas.
+
+#### Scenario: Instructor creates an activity
+- **WHEN** um usuário autorizado (instrutor) envia uma requisição `POST /academic_activities` com `subject_id`, `name`, e `due_date`.
+- **THEN** o sistema SHALL criar um novo registro na tabela `academic_activities` associado ao `subject_id` e ao `created_by` (usuário autenticado).
+
+### Requirement: List academic activities
+O sistema SHALL permitir a listagem de atividades acadêmicas, filtradas por disciplina.
+
+#### Scenario: User lists activities for a subject
+- **WHEN** um usuário envia uma requisição `GET /academic_activities` com o parâmetro de consulta `subject_id`.
+- **THEN** o sistema SHALL retornar uma lista de atividades que pertencem àquela disciplina.
+
+### Requirement: Update academic activities
+O sistema SHALL permitir que usuários autorizados atualizem uma atividade existente.
+
+#### Scenario: Instructor updates an activity
+- **WHEN** um usuário autorizado envia uma requisição `PATCH /academic_activities/{id}` com novos dados (ex: `name`, `description`, `due_date`).
+- **THEN** o sistema SHALL atualizar o registro correspondente.
+
+### Requirement: Delete academic activities
+O sistema SHALL permitir que usuários autorizados excluam uma atividade.
+
+#### Scenario: Instructor deletes an activity
+- **WHEN** um usuário autorizado envia uma requisição `DELETE /academic_activities/{id}`.
+- **THEN** o sistema SHALL remover o registro correspondente da tabela.

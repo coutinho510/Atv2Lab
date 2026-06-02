@@ -123,4 +123,3 @@ query "subjects" verb=GET {
   }
 
   tags = ["xano:quick-start"]
-}

@@ -161,8 +161,7 @@ query "subjects" verb=POST {
   }
 
   test "should return validation error when name is missing" {
-    input = {
-      name: ""
+    input = {name: ""
       description: "Missing name"
       credits: 2
     }

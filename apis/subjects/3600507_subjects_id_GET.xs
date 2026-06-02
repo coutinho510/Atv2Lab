@@ -98,8 +98,7 @@ query "subjects/{id}" verb=GET {
     expect.to_be_defined ($response.created_at)
   }
 
-  test "should return not found for non-existent subject" {
-    input = {id: 99999}
+  test "should return not found for non-existent subject" { input = {id: 99999}
 
     expect.to_throw {
       value = "notfound"
