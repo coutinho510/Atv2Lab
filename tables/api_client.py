@@ -18,7 +18,14 @@ def login_user(email, password):
         # A resposta do Xano para login bem-sucedido geralmente contém o token em 'authToken'
         return response.json().get("authToken")
     except requests.exceptions.RequestException as e:
-        st.error(f"Erro no login: Credenciais inválidas ou problema no servidor.")
+        # Tenta obter a mensagem de erro específica do Xano, se disponível
+        error_message = "Credenciais inválidas ou problema no servidor."
+        if e.response is not None:
+            try:
+                error_message = e.response.json().get('message', error_message)
+            except json.JSONDecodeError:
+                error_message = e.response.text
+        st.error(f"Erro no login: {error_message}")
         return None
 
 

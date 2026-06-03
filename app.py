@@ -1,8 +1,8 @@
 import streamlit as st
-import subprocess
 import json
 import pandas as pd
 from utils.api_client import get_subjects, get_activities_for_subject, login_user
+from utils.calculations import calculate_progress # Importação direta
 
 # Configuração da Página (Título na aba do navegador)
 st.set_page_config(page_title="EduTrack AI", page_icon="🎓", layout="wide")
@@ -64,9 +64,8 @@ def show_dashboard():
     if total_activities > 0:
         completed_items = st.slider("Itens Concluídos (Simulação)", 0, total_activities, int(total_activities / 2))
         
-        result = subprocess.run(['python', 'calculate_progress.py', '--completed', str(completed_items), '--total', str(total_activities)], capture_output=True, text=True)
-        progress_data = json.loads(result.stdout)
-        progress_percentage = progress_data.get("progress_percentage", 0)
+        # Chamada de função direta, mais simples e performática
+        progress_percentage = calculate_progress(completed_items, total_activities)
 
         st.progress(progress_percentage / 100, text=f"{progress_percentage:.2f}% de progresso")
     else:

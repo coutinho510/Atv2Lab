@@ -1,6 +1,4 @@
-## This group provides endpoints for subject CRUD operations, allowing users to create, read, update, and delete academic subjects within their account.
-api_group Subjects{
-  canonical = "uRmslBOX"
-  tags = ["xano:quick-start"]
+api_group subjects {
+  canonical = "wiohunQb"
+  swagger = {token: "OHHZz43uusE0wwsE60EU4tqLH3A"}
 }
-

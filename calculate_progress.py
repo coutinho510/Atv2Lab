@@ -1,7 +1,7 @@
 import argparse
 import json
 
-def calculate_progress(completed, total):
+def calculate_progress(completed: int, total: int) -> float:
     """
     Calcula a porcentagem de progresso.
     Retorna 0.0 se o total for 0 para evitar divisão por zero.
