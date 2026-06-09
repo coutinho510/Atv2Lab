@@ -11,4 +11,4 @@ table subjects {
     description = "ID do usuário proprietário da disciplina."
     relation = users.id
   }
-}
+};;

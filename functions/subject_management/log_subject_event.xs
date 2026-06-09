@@ -117,6 +117,6 @@ function "subject_management/log_subject_event" {
     }
   }
 
-  response = {success: $success, event_id: $event_id, error: $[""]}
+  response = {success: $success, event_id: $event_id, error: $.}
   tags = ["xano:quick-start"]
 }
