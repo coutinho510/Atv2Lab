@@ -28,7 +28,7 @@ def render_perfil_page():
             
             with col2:
                 st.metric("📧 E-mail", current_user.get('email', 'N/A'))
-                st.metric("✅ Status da Conta", "Ativa")
+                st.metric("✅ Cargo da Conta", current_user.get('role', 'N/A'))
         
         st.divider()
         

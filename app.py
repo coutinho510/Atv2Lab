@@ -1,14 +1,9 @@
 import streamlit as st
-import pandas as pd
-import requests
-from utils.api_client import (
-    get_subjects, create_subject, delete_record, XANO_API_URL, get_headers,
-    login_user, register_user, get_current_user, get_activities_for_subject # Adicionado get_activities_for_subject para o dashboard
-)
-from pages.disciplinas_page import render_disciplinas_page
-from pages.dashboard_page import render_dashboard_page
-from pages.tarefas_page import render_tarefas_page
-from pages.perfil_page import render_perfil_page
+from utils.api_client import login_user, register_user
+from views.disciplinas_page import render_disciplinas_page
+from views.dashboard_page import render_dashboard_page
+from views.tarefas_page import render_tarefas_page
+from views.perfil_page import render_perfil_page
 
 # --- Configuração da Página Original ---
 st.set_page_config(page_title="Edutrack-ai", page_icon="🎓", layout="wide")
@@ -30,24 +25,16 @@ if 'auth_mode' not in st.session_state:
 # SEÇÃO DE AUTENTICAÇÃO - Se não estiver logado
 # ==============================================================================
 if not st.session_state.auth_token:
+    # --- BARRA LATERAL (SIDEBAR) - Acesso ---
+    st.sidebar.title("🎓 Edutrack-ai")
+    st.sidebar.divider()
+    opcao_acesso = st.sidebar.radio("Acesso", ["🔐 Login", "📝 Registro"])
+    st.session_state.auth_mode = "login" if opcao_acesso == "🔐 Login" else "register"
+
     st.title("🎓 Edutrack-ai")
     st.markdown("### Sistema de Gerenciamento Acadêmico")
-    
-    # Criando abas para Login e Registro
-    col1, col2 = st.columns([1, 1])
-    
-    with col1:
-        if st.button("🔐 Login", key="btn_login", use_container_width=True):
-            st.session_state.auth_mode = "login"
-        
-        st.write("")
-        
-    with col2:
-        if st.button("📝 Registrar", key="btn_register", use_container_width=True):
-            st.session_state.auth_mode = "register"
-    
     st.divider()
-    
+
     # --- MODO: LOGIN ---
     if st.session_state.auth_mode == "login":
         st.subheader("🔐 Fazer Login")
