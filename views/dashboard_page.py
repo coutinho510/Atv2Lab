@@ -1,5 +1,5 @@
 import streamlit as st
-from utils.api_client import get_dashboard_subjects, get_dashboard_tasks, STATUS_LABELS
+from utils.api_client import get_dashboard_subjects, get_dashboard_tasks, is_task_overdue, STATUS_LABELS
 
 
 def render_dashboard_page():
@@ -83,8 +83,9 @@ def render_dashboard_page():
     else:
         for task in pendentes[:5]:
             label = STATUS_LABELS.get(task.get('status_tarefa'), task.get('status_tarefa'))
+            badge = " · :red[🔴 Atrasada]" if is_task_overdue(task) else ""
             st.markdown(
                 f"- **{task.get('title', 'Sem título')}** "
                 f"({task.get('subject_name') or 'Sem disciplina'}) — "
-                f"📅 {task.get('data')} · {label}"
+                f"📅 {task.get('data')} · {label}{badge}"
             )

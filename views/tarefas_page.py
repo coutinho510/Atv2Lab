@@ -19,6 +19,7 @@ from utils.api_client import (
     create_task,
     update_task,
     delete_task,
+    is_task_overdue,
     STATUS_LABELS,
     STATUS_OPTIONS,
 )
@@ -112,7 +113,10 @@ def render_task_card(task, subjects, key_prefix=""):
         col1, col2 = st.columns([3, 1])
 
         with col1:
-            st.markdown(f"### 📌 {title}")
+            if is_task_overdue(task):
+                st.markdown(f"### 📌 {title} :red[🔴 Atrasada]")
+            else:
+                st.markdown(f"### 📌 {title}")
             st.markdown(f"📘 **Disciplina:** {subject_name}")
             if description:
                 st.markdown(f"📝 **Descrição:** {description}")

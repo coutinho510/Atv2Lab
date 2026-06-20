@@ -17,6 +17,22 @@ STATUS_LABELS = {
 }
 STATUS_OPTIONS = list(STATUS_LABELS.keys())
 
+def is_task_overdue(task):
+    """Retorna True se a tarefa tem prazo vencido e ainda não foi concluída."""
+    if task.get('status_tarefa') == 'completa':
+        return False
+
+    task_date = task.get('data')
+    if not task_date:
+        return False
+
+    try:
+        due_date = datetime.strptime(task_date, "%Y-%m-%d").date()
+    except (ValueError, TypeError):
+        return False
+
+    return due_date < datetime.now().date()
+
 def get_headers():
     """Retorna os cabeçalhos de autorização para as chamadas de API."""
     return {"Authorization": f"Bearer {st.session_state.get('auth_token')}"}
