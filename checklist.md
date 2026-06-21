@@ -88,4 +88,4 @@ Criar uma tela inicial com visão geral do sistema logo após o login, exibindo:
   - [x] Seção 🔐 Segurança deve conter apenas o botão de trocar senha.
   - [x] Em ℹ️ Informações Adicionais, corrigir o formato de "conta criada em" (hoje exibe o timestamp bruto, ex: `1782001269632`).
   - [x] Em ✏️ Editar Perfil, os campos de edição devem ficar ocultos até o usuário clicar em um botão para exibi-los.
-- [ ] Tornar a tela de Relatórios mais detalhada.
+- [x] Tornar a tela de Relatórios mais detalhada.

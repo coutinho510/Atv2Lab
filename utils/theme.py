@@ -1,5 +1,7 @@
 """Paleta de cores vibrante usada para identificar cada disciplina visualmente."""
 
+import streamlit as st
+
 SUBJECT_PALETTE = [
     "#FF6B6B",  # vermelho coral
     "#4D96FF",  # azul vibrante
@@ -28,3 +30,14 @@ def subject_color_by_id(subject_id, subjects):
     """Busca a disciplina pelo id numa lista e retorna sua cor."""
     subject = next((s for s in subjects if s.get('id') == subject_id), None)
     return subject_color(subject) if subject else SUBJECT_PALETTE[0]
+
+
+def render_chips(counts):
+    """Renderiza um dicionário {rótulo: quantidade} como badges arredondados lado a lado."""
+    chips_html = "".join(
+        "<span style='background:#F4F1FE; color:#5C3FBF; border-radius:999px; "
+        "padding:0.35em 0.9em; margin:0.2em; display:inline-block; font-size:0.9em;'>"
+        f"{label}: <b>{count}</b></span>"
+        for label, count in counts.items()
+    )
+    st.markdown(chips_html, unsafe_allow_html=True)

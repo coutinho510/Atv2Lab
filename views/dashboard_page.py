@@ -7,7 +7,7 @@ from utils.api_client import (
     STATUS_LABELS,
     PRIORITY_LABELS,
 )
-from utils.theme import subject_color
+from utils.theme import subject_color, render_chips
 
 
 def render_dashboard_page():
@@ -135,17 +135,6 @@ def render_dashboard_page():
                     f"({task.get('subject_name') or 'Sem disciplina'}) — "
                     f"📅 {task_due_date_str(task)} · {label} · {priority_label}{badge}"
                 )
-
-
-def render_chips(counts):
-    """Renderiza um dicionário {rótulo: quantidade} como badges arredondados lado a lado."""
-    chips_html = "".join(
-        "<span style='background:#F4F1FE; color:#5C3FBF; border-radius:999px; "
-        "padding:0.35em 0.9em; margin:0.2em; display:inline-block; font-size:0.9em;'>"
-        f"{label}: <b>{count}</b></span>"
-        for label, count in counts.items()
-    )
-    st.markdown(chips_html, unsafe_allow_html=True)
 
 
 def render_welcome_screen():
