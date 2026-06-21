@@ -1,2 +1,6 @@
 __pycache__/
 *.pyc
+
+# Cache local de staging da extensão Xano (snapshots/flags que mudam a
+# cada sincronização, sem valor de conteúdo versionável)
+.xano/branches/*/objects.json
