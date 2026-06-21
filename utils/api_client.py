@@ -19,10 +19,12 @@ STATUS_LABELS = {
 STATUS_OPTIONS = list(STATUS_LABELS.keys())
 
 # --- Prioridade de Tarefas ---
+# Usamos triângulos (não o 🔴 usado no badge de "Atrasada") para não
+# confundir prioridade com tarefa em atraso.
 PRIORITY_LABELS = {
-    "baixa": "🟢 Baixa",
-    "media": "🟡 Média",
-    "alta": "🔴 Alta",
+    "baixa": "🔽 Baixa",
+    "media": "🔶 Média",
+    "alta": "🔺 Alta",
 }
 PRIORITY_OPTIONS = list(PRIORITY_LABELS.keys())
 
