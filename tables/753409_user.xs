@@ -25,7 +25,7 @@ table user {
   
     object password_reset? {
       schema {
-        text token?
+        password token?
         timestamp? expiration?
         bool used?
       }

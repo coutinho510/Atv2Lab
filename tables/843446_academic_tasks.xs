@@ -36,7 +36,7 @@ table academic_tasks {
     enum status_tarefa?=pendente {
       values = ["pendente", "completa", "em_progresso"]
     }
-
+  
     // Prioridade da tarefa
     enum prioridade?=media {
       values = ["baixa", "media", "alta"]

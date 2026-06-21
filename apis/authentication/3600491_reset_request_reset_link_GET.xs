@@ -9,7 +9,7 @@ query "reset/request-reset-link" verb=POST {
 
   stack {
     // Gera um código de 6 dígitos e salva no registro do usuário
-    function.run "Getting Started Template/generate_reset_code" {
+    function.run "Getting Started Template/generate_magic_link" {
       input = {email: $input.email}
     } as $code_and_email
   
