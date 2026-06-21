@@ -304,10 +304,10 @@ def get_grades_for_activity(activity_id):
         st.error(f"Erro ao buscar notas: {e}")
         return []
 
-def create_subject(name, professor, cargahoraria):
+def create_subject(name, professor, cargahoraria, periodo=""):
     """Cria uma nova disciplina (POST /create)."""
     try:
-        payload = {"name": name, "professor": professor, "cargahoraria": cargahoraria}
+        payload = {"name": name, "professor": professor, "cargahoraria": cargahoraria, "periodo": periodo}
         response = requests.post(f"{SUBJECT_API_URL}/create", json=payload, headers=get_headers())
         response.raise_for_status()
         st.cache_data.clear()
@@ -407,10 +407,10 @@ def get_subject_by_id(subject_id):
         st.error(f"Erro ao buscar disciplina: {e}")
         return None
 
-def update_subject(subject_id, name, professor, cargahoraria):
+def update_subject(subject_id, name, professor, cargahoraria, periodo=""):
     """Atualiza os dados de uma disciplina (PUT /update/{subject_id})."""
     try:
-        payload = {"name": name, "professor": professor, "cargahoraria": cargahoraria}
+        payload = {"name": name, "professor": professor, "cargahoraria": cargahoraria, "periodo": periodo}
         response = requests.put(f"{SUBJECT_API_URL}/update/{subject_id}", json=payload, headers=get_headers())
         response.raise_for_status()
         st.cache_data.clear()

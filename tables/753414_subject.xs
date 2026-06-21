@@ -32,6 +32,9 @@ table subject {
     enum status?=active {
       values = ["rascunho", "ativo", "arquivado"]
     }
+
+    // Período/semestre da disciplina (ex.: "2026.1")
+    text periodo? filters=trim
   }
 
   index = [

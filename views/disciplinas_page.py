@@ -80,6 +80,7 @@ def render_disciplinas_page():
                 subject_name = subject.get('name', 'Sem nome')
                 subject_professor = subject.get('professor', 'Professor não informado')
                 subject_cargahoraria = subject.get('cargahoraria', 'Carga horária não informada')
+                subject_periodo = subject.get('periodo', '')
                 created_at = subject.get('created_at', '')
 
                 color = subject_color(subject)
@@ -93,6 +94,8 @@ def render_disciplinas_page():
                         )
                         st.markdown(f"👨‍🏫 **Professor:** {subject_professor}")
                         st.markdown(f"⏱️ **Carga Horária:** {subject_cargahoraria}h")
+                        if subject_periodo:
+                            st.markdown(f"🗓️ **Período:** {subject_periodo}")
                         if created_at:
                             st.caption(f"📅 Criada em: {created_at}")
 
@@ -136,7 +139,7 @@ def render_disciplinas_page():
                     # Se estiver em modo edição para esta disciplina
                     if st.session_state.edit_mode_id == subject_id:
                         st.divider()
-                        render_edit_subject_form(subject_id, subject_name, subject_professor, subject_cargahoraria)
+                        render_edit_subject_form(subject_id, subject_name, subject_professor, subject_cargahoraria, subject_periodo)
     
     # ==================================================
     # ABA 2: CRIAR NOVA DISCIPLINA
@@ -171,6 +174,7 @@ def render_disciplinas_page():
                     subject_name = result.get('name', 'Sem nome')
                     subject_professor = result.get('professor', 'Professor não informado')
                     subject_cargahoraria = result.get('cargahoraria', 'Carga horária não informada')
+                    subject_periodo = result.get('periodo', '')
 
                     with st.container(border=True):
                         st.markdown(
@@ -182,6 +186,8 @@ def render_disciplinas_page():
                             st.markdown(f"👨‍🏫 **Professor:** {subject_professor}")
                         with col2:
                             st.markdown(f"⏱️ **Carga Horária:** {subject_cargahoraria}h")
+                        if subject_periodo:
+                            st.markdown(f"🗓️ **Período:** {subject_periodo}")
         else:
             st.info("ℹ️ Digite o nome de uma disciplina para buscar")
 
@@ -214,6 +220,13 @@ def render_create_subject_form():
             help="Quantas horas tem a disciplina?"
         )
 
+        subject_periodo = st.text_input(
+            "🗓️ Período/Semestre",
+            placeholder="Ex: 2026.1",
+            max_chars=20,
+            help="Opcional. Use o formato que preferir, ex.: 2026.1, 1º Semestre."
+        )
+
         # Botão de envio
         submitted = st.form_submit_button(
             "✅ Criar Disciplina",
@@ -241,7 +254,7 @@ def render_create_subject_form():
                 return
 
             # Criar disciplina
-            result = create_subject(subject_name, subject_professor, subject_cargahoraria)
+            result = create_subject(subject_name, subject_professor, subject_cargahoraria, subject_periodo)
 
             if result:
                 st.success(f"✅ Disciplina '{subject_name}' criada com sucesso!")
@@ -251,7 +264,7 @@ def render_create_subject_form():
                 st.error("❌ Erro ao criar disciplina. Tente novamente.")
 
 
-def render_edit_subject_form(subject_id, original_name, original_professor, original_cargahoraria):
+def render_edit_subject_form(subject_id, original_name, original_professor, original_cargahoraria, original_periodo=""):
     """Renderiza o formulário de edição de disciplina."""
 
     st.markdown("### ✏️ Editar Disciplina")
@@ -276,6 +289,13 @@ def render_edit_subject_form(subject_id, original_name, original_professor, orig
             max_value=200,
             value=int(original_cargahoraria) if isinstance(original_cargahoraria, (int, float)) else 60,
             step=1
+        )
+
+        edited_periodo = st.text_input(
+            "🗓️ Período/Semestre",
+            value=original_periodo or "",
+            max_chars=20,
+            placeholder="Ex: 2026.1"
         )
 
         col1, col2 = st.columns(2)
@@ -312,7 +332,7 @@ def render_edit_subject_form(subject_id, original_name, original_professor, orig
                 return
 
             # Atualizar disciplina
-            result = update_subject(subject_id, edited_name, edited_professor, edited_cargahoraria)
+            result = update_subject(subject_id, edited_name, edited_professor, edited_cargahoraria, edited_periodo)
 
             if result:
                 st.success(f"✅ Disciplina atualizada com sucesso!")
