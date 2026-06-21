@@ -76,3 +76,16 @@ Criar uma tela inicial com visão geral do sistema logo após o login, exibindo:
 - [x] Melhorar a tela de login e cadastro com um layout mais atrativo.
 - [x] Exibir uma tela de boas-vindas para usuários que ainda não possuem dados cadastrados.
 - [x] Solicitar confirmação antes de excluir disciplinas ou tarefas.
+
+---
+
+## 🔧 Manutenções e Ajustes Pendentes
+
+- [ ] Em "📅 Próximas Tarefas" (Dashboard), exibir também a prioridade de cada tarefa, além do indicador de atraso.
+- [x] Trocar o ícone de prioridade alta (atualmente 🔴, igual ao de "atrasada"), pois os dois indicadores estão se confundindo visualmente.
+- [ ] Redesenhar o 🏠 Dashboard para ser visualmente mais simples e bonito, mostrando quantidade de tarefas, status, prioridades e disciplinas.
+- [ ] Redesenhar a página 👤 Meu Perfil:
+  - [ ] Seção 🔐 Segurança deve conter apenas o botão de trocar senha.
+  - [ ] Em ℹ️ Informações Adicionais, corrigir o formato de "conta criada em" (hoje exibe o timestamp bruto, ex: `1782001269632`).
+  - [ ] Em ✏️ Editar Perfil, os campos de edição devem ficar ocultos até o usuário clicar em um botão para exibi-los.
+- [ ] Tornar a tela de Relatórios mais detalhada.
