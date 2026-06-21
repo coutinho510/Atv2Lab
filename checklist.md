@@ -81,7 +81,7 @@ Criar uma tela inicial com visão geral do sistema logo após o login, exibindo:
 
 ## 🔧 Manutenções e Ajustes Pendentes
 
-- [ ] Em "📅 Próximas Tarefas" (Dashboard), exibir também a prioridade de cada tarefa, além do indicador de atraso.
+- [x] Em "📅 Próximas Tarefas" (Dashboard), exibir também a prioridade de cada tarefa, além do indicador de atraso.
 - [x] Trocar o ícone de prioridade alta (atualmente 🔴, igual ao de "atrasada"), pois os dois indicadores estão se confundindo visualmente.
 - [ ] Redesenhar o 🏠 Dashboard para ser visualmente mais simples e bonito, mostrando quantidade de tarefas, status, prioridades e disciplinas.
 - [ ] Redesenhar a página 👤 Meu Perfil:

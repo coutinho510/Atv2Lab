@@ -5,6 +5,7 @@ from utils.api_client import (
     is_task_overdue,
     task_due_date_str,
     STATUS_LABELS,
+    PRIORITY_LABELS,
 )
 from utils.theme import subject_color
 
@@ -100,11 +101,12 @@ def render_dashboard_page():
     else:
         for task in pendentes[:5]:
             label = STATUS_LABELS.get(task.get('status_tarefa'), task.get('status_tarefa'))
+            priority_label = PRIORITY_LABELS.get(task.get('prioridade', 'media'), task.get('prioridade'))
             badge = " · :red[🔴 Atrasada]" if is_task_overdue(task) else ""
             st.markdown(
                 f"- **{task.get('title', 'Sem título')}** "
                 f"({task.get('subject_name') or 'Sem disciplina'}) — "
-                f"📅 {task_due_date_str(task)} · {label}{badge}"
+                f"📅 {task_due_date_str(task)} · {label} · {priority_label}{badge}"
             )
 
 
