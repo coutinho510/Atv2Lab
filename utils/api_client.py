@@ -144,13 +144,13 @@ def update_profile(name=None, email=None):
         return None
 
 def request_password_reset(email):
-    """Solicita o envio do link de redefinição de senha por e-mail (GET /reset/request-reset-link)."""
+    """Solicita o envio do código de redefinição de senha por e-mail (POST /reset/request-reset-link)."""
     try:
-        response = requests.get(f"{XANO_API_URL}/reset/request-reset-link", params={"email": email})
+        response = requests.post(f"{XANO_API_URL}/reset/request-reset-link", json={"email": email})
         response.raise_for_status()
         return True
     except requests.exceptions.RequestException as e:
-        error_message = "Não foi possível enviar o link de redefinição."
+        error_message = "Não foi possível enviar o código de redefinição."
         if e.response is not None:
             try:
                 error_message = e.response.json().get('message', e.response.text)
@@ -159,22 +159,29 @@ def request_password_reset(email):
         st.error(f"Erro: {error_message}")
         return False
 
-def magic_link_login(email, magic_token):
-    """Troca o token mágico recebido por e-mail por um authToken temporário (POST /reset/magic-link-login)."""
+def confirm_password_reset(email, code, password, confirm_password):
+    """Confirma o código de redefinição recebido por e-mail e grava a nova senha
+    em uma única chamada (POST /reset/confirm-code). Não exige autenticação: o
+    código enviado por e-mail é a prova de identidade."""
     try:
-        payload = {"email": email, "magic_token": magic_token}
-        response = requests.post(f"{XANO_API_URL}/reset/magic-link-login", json=payload)
+        payload = {
+            "email": email,
+            "code": code,
+            "password": password,
+            "confirm_password": confirm_password,
+        }
+        response = requests.post(f"{XANO_API_URL}/reset/confirm-code", json=payload)
         response.raise_for_status()
-        return response.json().get("authToken")
+        return True
     except requests.exceptions.RequestException as e:
-        error_message = "Token inválido ou expirado."
+        error_message = "Código inválido ou expirado."
         if e.response is not None:
             try:
                 error_message = e.response.json().get('message', e.response.text)
             except json.JSONDecodeError:
                 error_message = e.response.text
         st.error(f"Erro: {error_message}")
-        return None
+        return False
 
 def update_password(password, confirm_password, token):
     """Define uma nova senha usando o token informado (POST /reset/update_password)."""

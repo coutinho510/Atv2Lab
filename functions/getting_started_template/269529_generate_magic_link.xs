@@ -9,29 +9,29 @@ function "Getting Started Template/generate_reset_code" {
     precondition ($input.email != null) {
       error = "email is required but was not suppiled. "
     }
-
+  
     // Gets the user record by email
     db.query user {
       where = $db.user.email == $input.email
       return = {type: "single"}
     } as $user
-
+  
     // Verifies that the user record exists
     precondition ($user != null) {
       error_type = "notfound"
       error = "No user found for that email."
     }
-
+  
     // Gera um código numérico de 6 dígitos (ex.: 384921)
     security.random_number {
       min = 100000
       max = 999999
     } as $random_code
-
+  
     var $token {
       value = $random_code|to_text
     }
-
+  
     // Builds the password reset object
     var $password_reset {
       value = {}
@@ -41,7 +41,7 @@ function "Getting Started Template/generate_reset_code" {
         )
         |set:"used":false
     }
-
+  
     // Updates the user record with the password reset object
     db.edit user {
       field_name = "id"

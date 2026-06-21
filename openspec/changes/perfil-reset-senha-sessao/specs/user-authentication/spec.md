@@ -1,22 +1,22 @@
 ## ADDED Requirements
 
-### Requirement: Usuário pode redefinir a senha via e-mail
-Usuários deslogados que esqueceram a senha SHALL ser capazes de solicitar um link de redefinição por e-mail e concluir a troca de senha usando o token recebido.
+### Requirement: Usuário pode redefinir a senha via código enviado por e-mail
+Usuários deslogados que esqueceram a senha SHALL ser capazes de solicitar um código de 6 dígitos por e-mail (via Resend) e concluir a troca de senha informando esse código em uma única chamada, sem token intermediário.
 
-#### Scenario: Usuário solicita o link de redefinição
+#### Scenario: Usuário solicita o código de redefinição
 - **WHEN** um usuário deslogado informa seu e-mail cadastrado na opção "Esqueci a Senha" e confirma
-- **THEN** o sistema chama `GET /reset/request-reset-link`, que envia o e-mail com o link e confirma o envio
+- **THEN** o sistema chama `POST /reset/request-reset-link`, que gera um código numérico de 6 dígitos (válido por 15 minutos), envia por e-mail via Resend e confirma o envio
 
 #### Scenario: E-mail informado não está cadastrado
 - **WHEN** um usuário informa um e-mail que não existe na base
-- **THEN** o sistema exibe o erro retornado pela API ("No user found for that email"); isso permite enumerar e-mails cadastrados, limitação conhecida do endpoint existente que não foi alterado nesta mudança
+- **THEN** o sistema exibe o erro retornado pela API ("No user found for that email"); isso permite enumerar e-mails cadastrados, limitação conhecida herdada do endpoint que gera o código
 
-#### Scenario: Usuário conclui a redefinição com token válido
-- **WHEN** um usuário informa e-mail, `magic_token` válido e uma nova senha (com confirmação) na etapa de conclusão
-- **THEN** o sistema troca o token por uma sessão temporária via `POST /reset/magic-link-login` e atualiza a senha via `POST /reset/update_password`
+#### Scenario: Usuário conclui a redefinição com código válido
+- **WHEN** um usuário informa e-mail, o código de 6 dígitos recebido e uma nova senha (com confirmação) na etapa de conclusão
+- **THEN** o sistema chama `POST /reset/confirm-code`, que valida o código contra o salvo no usuário e grava a nova senha numa única gravação, sem emitir token de sessão
 
-#### Scenario: Token de redefinição inválido ou expirado
-- **WHEN** o `magic_token` informado é inválido, expirado ou já utilizado
+#### Scenario: Código de redefinição inválido, expirado ou já usado
+- **WHEN** o código informado não corresponde ao salvo, está expirado (mais de 15 minutos) ou já foi utilizado
 - **THEN** o sistema exibe o erro retornado pela API e não altera a senha
 
 ### Requirement: Sessão é encerrada automaticamente quando o token expira

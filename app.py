@@ -3,8 +3,7 @@ from utils.api_client import (
     login_user,
     register_user,
     request_password_reset,
-    magic_link_login,
-    update_password,
+    confirm_password_reset,
     is_session_expired,
 )
 from views.disciplinas_page import render_disciplinas_page
@@ -102,38 +101,34 @@ if not st.session_state.auth_token:
     # --- MODO: ESQUECI A SENHA ---
     else:
         st.subheader("🔁 Redefinir Senha")
-        st.markdown("**Passo 1:** informe seu e-mail para receber um link de redefinição.")
+        st.markdown("**Passo 1:** informe seu e-mail para receber um código de 6 dígitos.")
 
         with st.form("form_request_reset", clear_on_submit=False):
             reset_email = st.text_input("E-mail")
 
-            if st.form_submit_button("📧 Enviar Link", type="primary", use_container_width=True):
+            if st.form_submit_button("📧 Enviar Código", type="primary", use_container_width=True):
                 if reset_email:
                     if request_password_reset(reset_email):
-                        st.success("✅ Se o e-mail existir em nossa base, um link de redefinição foi enviado.")
+                        st.success("✅ Código de redefinição enviado! Confira seu e-mail.")
                 else:
                     st.error("Por favor, informe o e-mail.")
 
         st.divider()
-        st.markdown(
-            "**Passo 2:** copie o `email` e o `magic_token` da URL recebida por e-mail "
-            "e defina sua nova senha abaixo."
-        )
+        st.markdown("**Passo 2:** informe o código recebido por e-mail e defina sua nova senha.")
 
         with st.form("form_complete_reset", clear_on_submit=False):
-            token_email = st.text_input("E-mail", key="reset_token_email")
-            magic_token = st.text_input("Token recebido por e-mail (magic_token)")
+            code_email = st.text_input("E-mail", key="reset_code_email")
+            reset_code = st.text_input("Código recebido por e-mail (6 dígitos)")
             new_password = st.text_input("Nova Senha", type="password", key="reset_new_password")
             confirm_new_password = st.text_input("Confirmar Nova Senha", type="password", key="reset_confirm_password")
 
             if st.form_submit_button("🔐 Redefinir Senha", use_container_width=True):
-                if not all([token_email, magic_token, new_password, confirm_new_password]):
+                if not all([code_email, reset_code, new_password, confirm_new_password]):
                     st.error("Por favor, preencha todos os campos.")
                 elif new_password != confirm_new_password:
                     st.error("As senhas não correspondem.")
                 else:
-                    temp_token = magic_link_login(token_email, magic_token)
-                    if temp_token and update_password(new_password, confirm_new_password, temp_token):
+                    if confirm_password_reset(code_email, reset_code, new_password, confirm_new_password):
                         st.success("✅ Senha redefinida com sucesso! Clique em 'Login' acima para entrar.")
 
         st.info("Já tem uma conta? Clique em 'Login' acima para entrar.")

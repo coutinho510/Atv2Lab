@@ -6,7 +6,7 @@ A auditoria do `checklist.md` apontou três lacunas na seção "Autenticação e
 
 - **Editar Perfil**: novo formulário em `views/perfil_page.py` que chama `update_profile()` (novo, em `utils/api_client.py`) contra o PATCH `/user/edit_profile` já existente.
 - **Alterar Senha (usuário logado)**: o botão "Alterar Senha" (hoje um stub) passa a usar a mesma função `update_password()` com o token de sessão atual, sem precisar do fluxo de e-mail.
-- **Esqueci a Senha (usuário deslogado)**: nova opção na tela de acesso (`app.py`) com duas etapas — solicitar link (`request_password_reset()` → GET `/reset/request-reset-link`) e concluir a redefinição informando o `magic_token` recebido por e-mail (`magic_link_login()` → POST `/reset/magic-link-login`, seguido de `update_password()` com o token temporário retornado).
+- **Esqueci a Senha (usuário deslogado)**: nova opção na tela de acesso (`app.py`) com duas etapas — solicitar código (`request_password_reset()` → POST `/reset/request-reset-link`, que gera um código de 6 dígitos e envia por e-mail via **Resend**) e concluir a redefinição informando e-mail + código + nova senha em uma única chamada (`confirm_password_reset()` → POST `/reset/confirm-code`). Sem token intermediário: o código em si é a prova de identidade. Esse fluxo substitui uma primeira versão baseada em magic-link/UUID, reescrita para espelhar a implementação já validada no projeto `atv-praticainovation` (XanoScript ajustado nessa mesma branch, ver commit "feat(xano): reset de senha via codigo de 6 digitos + Resend").
 - **Logout automático**: nova função `is_session_expired()` que verifica se `GET /auth/me` retorna 401/403; chamada uma vez ao renderizar a área autenticada de `app.py`, limpando a sessão e voltando à tela de login com um aviso quando o token expirou.
 
 ## Capabilities
@@ -20,8 +20,12 @@ A auditoria do `checklist.md` apontou três lacunas na seção "Autenticação e
 
 ## Impact
 
-- **Frontend apenas**: `utils/api_client.py`, `views/perfil_page.py`, `app.py`.
-- **Backend**: nenhuma mudança — todos os endpoints usados já existem (`Authentication` e `Members & Accounts` API groups). Nenhum arquivo `.xs` foi modificado, conforme a diretriz do projeto de não escrever XanoScript diretamente.
-- **Limitações conhecidas**:
-  - O e-mail de redefinição enviado pelo backend aponta para uma página de demonstração do Xano (`/1_start_here_demo_page#/update-password`), não para o app Streamlit. Por isso o usuário precisa copiar manualmente o `magic_token` e o e-mail da URL recebida e colá-los na segunda etapa do formulário de redefinição. Apontar o link para o domínio real do app exigiria alterar o XanoScript do endpoint `reset/request-reset-link` e está fora do escopo desta mudança.
-  - A função `generate_magic_link` retorna o erro "No user found for that email" quando o e-mail não existe, e esse erro é repassado ao usuário pela tela de "Esqueci a Senha". Isso permite enumerar e-mails cadastrados (testado manualmente). Corrigir isso também exigiria alterar XanoScript e está fora do escopo desta mudança.
+- **Frontend**: `utils/api_client.py`, `views/perfil_page.py`, `app.py`.
+- **Backend (XanoScript, deploy manual do usuário via push staged to Xano)**:
+  - `functions/getting_started_template/269529_generate_magic_link.xs`: renomeada para `generate_reset_code`, gera código numérico de 6 dígitos (15min de expiração) em vez de UUID (60min).
+  - `apis/authentication/3600491_reset_request_reset_link_GET.xs`: verb `GET`→`POST`; envia o e-mail com o código via Resend (`service_provider = "resend"`, `api_key = $env.RESEND_API_KEY_`) em vez do provedor `"xano"`.
+  - `apis/authentication/3600492_reset_magic_link_login_POST.xs`: vira `reset/confirm-code`, valida o código e grava a nova senha em uma única chamada sem emitir token.
+  - `tables/753409_user.xs`: `password_reset.token` muda de `password` (hash automático) para `text`, necessário para a comparação direta de texto no `confirm-code`.
+  - `apis/authentication/3600493_reset_update_password_POST.xs` não foi alterado (usado só no fluxo de "Alterar Senha" logado).
+- **Configuração manual necessária no Xano** (fora do alcance desta mudança via código): variável de ambiente `RESEND_API_KEY_` com uma chave gerada em resend.com/api-keys.
+- **Limitação conhecida**: a função `generate_reset_code` retorna o erro "No user found for that email" quando o e-mail não existe, e esse erro é repassado ao usuário pela tela de "Esqueci a Senha". Isso permite enumerar e-mails cadastrados (testado manualmente, mesmo comportamento do projeto de referência). Corrigir isso exigiria alterar XanoScript adicional e está fora do escopo desta mudança.

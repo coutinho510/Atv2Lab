@@ -12,12 +12,12 @@ query "reset/request-reset-link" verb=POST {
     function.run "Getting Started Template/generate_reset_code" {
       input = {email: $input.email}
     } as $code_and_email
-
+  
     // Verifica se o código foi gerado com sucesso
     precondition ($code_and_email != null) {
       error = "Não foi possível gerar o código de redefinição. Tente novamente."
     }
-
+  
     // Cria o corpo do e-mail em HTML
     util.template_engine {
       value = """
@@ -117,7 +117,7 @@ query "reset/request-reset-link" verb=POST {
         </html>
         """
     } as $message
-
+  
     // Envia o e-mail via Resend (plano gratuito: 3.000/mês, 100/dia).
     // Variável de ambiente necessária no Xano:
     //   RESEND_API_KEY → chave gerada em resend.com/api-keys
