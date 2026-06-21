@@ -83,7 +83,7 @@ Criar uma tela inicial com visão geral do sistema logo após o login, exibindo:
 
 - [x] Em "📅 Próximas Tarefas" (Dashboard), exibir também a prioridade de cada tarefa, além do indicador de atraso.
 - [x] Trocar o ícone de prioridade alta (atualmente 🔴, igual ao de "atrasada"), pois os dois indicadores estão se confundindo visualmente.
-- [ ] Redesenhar o 🏠 Dashboard para ser visualmente mais simples e bonito, mostrando quantidade de tarefas, status, prioridades e disciplinas.
+- [x] Redesenhar o 🏠 Dashboard para ser visualmente mais simples e bonito, mostrando quantidade de tarefas, status, prioridades e disciplinas.
 - [ ] Redesenhar a página 👤 Meu Perfil:
   - [ ] Seção 🔐 Segurança deve conter apenas o botão de trocar senha.
   - [ ] Em ℹ️ Informações Adicionais, corrigir o formato de "conta criada em" (hoje exibe o timestamp bruto, ex: `1782001269632`).
