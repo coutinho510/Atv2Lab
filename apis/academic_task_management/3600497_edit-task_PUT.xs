@@ -13,6 +13,9 @@ query "edit-task/{academic_tasks_id}" verb=PUT {
     enum status_tarefa? {
       values = ["pendente", "completa", "em_progresso"]
     }
+    enum prioridade? {
+      values = ["baixa", "media", "alta"]
+    }
   }
 
   stack {
@@ -80,7 +83,16 @@ query "edit-task/{academic_tasks_id}" verb=PUT {
         }
       }
     }
-  
+
+    conditional {
+      if ($input.prioridade != null) {
+        var.update $updates {
+          value = $updates
+            |set:"prioridade":$input.prioridade
+        }
+      }
+    }
+
     // Aplica as atualizações se houver alguma
     db.patch academic_tasks {
       field_name = "id"

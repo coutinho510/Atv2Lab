@@ -12,6 +12,9 @@ query "add-task" verb=POST {
     enum status_tarefa?=pendente {
       values = ["pendente", "completa", "em_progresso"]
     }
+    enum prioridade?=media {
+      values = ["baixa", "media", "alta"]
+    }
   }
 
   stack {
@@ -24,6 +27,7 @@ query "add-task" verb=POST {
         description  : $input.description
         data         : $input.data
         status_tarefa: $input.status_tarefa
+        prioridade   : $input.prioridade
         created_at   : now
       }
     } as $new_task
