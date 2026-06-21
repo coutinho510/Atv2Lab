@@ -16,6 +16,10 @@ def render_dashboard_page():
     subjects = get_dashboard_subjects() or []
     tasks = get_dashboard_tasks() or []
 
+    if not subjects:
+        render_welcome_screen()
+        return
+
     total_active_subjects = sum(1 for s in subjects if s.get('status', 'ativo') == 'ativo')
     total_pending_tasks = sum(1 for t in tasks if t.get('status_tarefa') != 'completa')
 
@@ -100,3 +104,36 @@ def render_dashboard_page():
                 f"({task.get('subject_name') or 'Sem disciplina'}) — "
                 f"📅 {task_due_date_str(task)} · {label}{badge}"
             )
+
+
+def render_welcome_screen():
+    """Tela de boas-vindas para usuários sem disciplinas cadastradas ainda."""
+    st.markdown("<div style='height:1.5em;'></div>", unsafe_allow_html=True)
+
+    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+    with col_centro:
+        st.markdown(
+            "<h2 style='text-align:center;'>🎉 Bem-vindo(a) ao EduTrack AI!</h2>"
+            "<p style='text-align:center;color:#71717a;'>"
+            "Vamos organizar sua vida acadêmica em 3 passos rápidos."
+            "</p>",
+            unsafe_allow_html=True,
+        )
+
+        with st.container(border=True):
+            st.markdown("**1️⃣ Cadastre suas disciplinas**")
+            st.caption("Nome, professor e carga horária de cada matéria que você está cursando.")
+            st.markdown("**2️⃣ Adicione suas tarefas**")
+            st.caption("Provas, trabalhos e atividades, com prazo e status de cada uma.")
+            st.markdown("**3️⃣ Acompanhe seu progresso**")
+            st.caption("Veja aqui no Dashboard quantas tarefas estão pendentes, em atraso ou concluídas.")
+
+            st.divider()
+
+            if st.button(
+                "📚 Cadastrar minha primeira disciplina",
+                type="primary",
+                use_container_width=True,
+            ):
+                st.session_state.pending_nav = "Disciplinas"
+                st.rerun()

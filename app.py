@@ -61,6 +61,11 @@ if 'auth_token' not in st.session_state:
 if 'user_data' not in st.session_state:
     st.session_state.user_data = None
 
+# Navegação programática (ex.: botão da tela de boas-vindas): precisa ser
+# aplicada antes do widget de navegação ser instanciado nesta execução.
+if 'pending_nav' in st.session_state:
+    st.session_state.nav_menu = st.session_state.pop('pending_nav')
+
 # ==============================================================================
 # SEÇÃO DE AUTENTICAÇÃO - Se não estiver logado
 # ==============================================================================
@@ -190,7 +195,11 @@ else:
     st.sidebar.divider()
     
     # Menu de navegação
-    opcao_menu = st.sidebar.radio("Navegar", ["Dashboard", "Disciplinas", "Tarefas", "Relatórios", "Perfil"])
+    opcao_menu = st.sidebar.radio(
+        "Navegar",
+        ["Dashboard", "Disciplinas", "Tarefas", "Relatórios", "Perfil"],
+        key="nav_menu",
+    )
     
     st.sidebar.divider()
     
