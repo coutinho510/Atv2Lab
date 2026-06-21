@@ -27,6 +27,8 @@ def render_dashboard_page():
     # Ex: 3 disciplinas com 1 tarefa cada, sendo 1 completa => (1 + 0 + 0) / 3 = 33%
     progresso_disciplinas = []
     for subject in subjects:
+        if subject.get('status') == 'arquivado':
+            continue
         subject_tasks = [t for t in tasks if t.get('subject_id') == subject.get('id')]
         if subject_tasks:
             concluidas = sum(1 for t in subject_tasks if t.get('status_tarefa') == 'completa')

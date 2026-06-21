@@ -425,6 +425,31 @@ def update_subject(subject_id, name, professor, cargahoraria):
         st.error(f"Erro ao atualizar disciplina: {error_message}")
         return None
 
+def set_subject_status(subject_id, status):
+    """Atualiza apenas o status de uma disciplina (PUT /update/{subject_id}).
+
+    Usado para arquivar ("arquivado") ou reativar ("ativo") uma disciplina
+    sem precisar reenviar nome/professor/carga horária.
+    """
+    try:
+        response = requests.put(
+            f"{SUBJECT_API_URL}/update/{subject_id}",
+            json={"status": status},
+            headers=get_headers(),
+        )
+        response.raise_for_status()
+        st.cache_data.clear()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        error_message = "Erro ao atualizar status da disciplina."
+        if e.response is not None:
+            try:
+                error_message = e.response.json().get('message', e.response.text)
+            except json.JSONDecodeError:
+                error_message = e.response.text
+        st.error(f"Erro ao atualizar status da disciplina: {error_message}")
+        return None
+
 def check_duplicate_subject(name, professor, exclude_id=None):
     """Verifica se já existe uma disciplina com o mesmo nome e professor.
 

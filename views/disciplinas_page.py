@@ -17,6 +17,7 @@ from utils.api_client import (
     create_subject,
     update_subject,
     delete_subject,
+    set_subject_status,
     check_duplicate_subject,
     search_subjects_by_name,
 )
@@ -56,13 +57,23 @@ def render_disciplinas_page():
             st.rerun()
         
         # Buscar disciplinas
-        subjects = get_subjects()
-        
-        if not subjects:
+        todas_subjects = get_subjects()
+
+        if not todas_subjects:
             st.info("ℹ️ Você ainda não tem nenhuma disciplina cadastrada. Clique na aba 'Nova Disciplina' para criar uma.")
         else:
-            st.success(f"✅ Total de disciplinas: {len(subjects)}")
-            
+            mostrar_arquivadas = st.checkbox("📦 Mostrar disciplinas arquivadas", key="mostrar_arquivadas")
+
+            arquivadas = [s for s in todas_subjects if s.get('status') == 'arquivado']
+            subjects = arquivadas if mostrar_arquivadas else [s for s in todas_subjects if s.get('status') != 'arquivado']
+
+            if mostrar_arquivadas and not subjects:
+                st.info("ℹ️ Nenhuma disciplina arquivada.")
+            elif not mostrar_arquivadas and not subjects:
+                st.info("ℹ️ Nenhuma disciplina ativa. Marque 'Mostrar disciplinas arquivadas' para ver as arquivadas.")
+            else:
+                st.success(f"✅ Total: {len(subjects)}")
+
             # Exibir cada disciplina em um card
             for i, subject in enumerate(subjects):
                 subject_id = subject.get('id')
@@ -91,6 +102,17 @@ def render_disciplinas_page():
                         if st.button("✏️ Editar", key=f"edit_{subject_id}"):
                             st.session_state.edit_mode_id = subject_id
                             st.rerun()
+
+                        if subject.get('status') == 'arquivado':
+                            if st.button("♻️ Reativar", key=f"reactivate_{subject_id}"):
+                                if set_subject_status(subject_id, "ativo"):
+                                    st.success(f"✅ Disciplina '{subject_name}' reativada!")
+                                    st.rerun()
+                        else:
+                            if st.button("📦 Arquivar", key=f"archive_{subject_id}"):
+                                if set_subject_status(subject_id, "arquivado"):
+                                    st.success(f"✅ Disciplina '{subject_name}' arquivada!")
+                                    st.rerun()
 
                         if st.button("🗑️ Deletar", key=f"delete_{subject_id}"):
                             st.session_state.confirm_delete_id = subject_id

@@ -62,6 +62,8 @@ def render_relatorios_page():
         st.info("ℹ️ Cadastre disciplinas e tarefas para acompanhar o progresso aqui.")
     else:
         for subject in subjects:
+            if subject.get('status') == 'arquivado':
+                continue
             subject_tasks = [t for t in tasks if t.get('subject_id') == subject.get('id')]
             total = len(subject_tasks)
             concluidas = sum(1 for t in subject_tasks if t.get('status_tarefa') == 'completa')

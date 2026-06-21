@@ -73,7 +73,8 @@ def render_tarefas_page():
     # ==================================================
     with aba2:
         st.subheader("➕ Cadastrar Nova Tarefa")
-        render_create_task_form(subjects)
+        subjects_ativas = [s for s in subjects if s.get('status') != 'arquivado']
+        render_create_task_form(subjects_ativas)
 
     # ==================================================
     # ABA 3: BUSCAR TAREFAS
