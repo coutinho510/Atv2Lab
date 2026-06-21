@@ -11,6 +11,8 @@ Funcionalidades:
 - Buscar por nome
 """
 
+from datetime import datetime
+
 import streamlit as st
 from utils.api_client import (
     get_subjects,
@@ -23,6 +25,17 @@ from utils.api_client import (
 )
 from utils.theme import subject_color
 
+def format_timestamp(value):
+    """Formata um timestamp epoch (em segundos ou milissegundos) para dd/mm/aaaa HH:MM."""
+    if not value:
+        return 'N/A'
+    try:
+        ts = float(value)
+        if ts > 1e12:  # epoch em milissegundos
+            ts /= 1000
+        return datetime.fromtimestamp(ts).strftime('%d/%m/%Y %H:%M')
+    except (ValueError, TypeError, OSError):
+        return str(value)
 
 def render_disciplinas_page():
     """Renderiza a página completa de gestão de disciplinas."""
@@ -97,7 +110,7 @@ def render_disciplinas_page():
                         if subject_periodo:
                             st.markdown(f"🗓️ **Período:** {subject_periodo}")
                         if created_at:
-                            st.caption(f"📅 Criada em: {created_at}")
+                            st.caption(f"📅 Criada em: {format_timestamp(created_at)}")
 
                     with col2:
                         # Botões de ação
