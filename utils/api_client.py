@@ -8,6 +8,7 @@ XANO_API_URL = "https://x8ki-letl-twmt.n7.xano.io/api:xhk3GBZb"  # Substitua pel
 SUBJECT_API_URL = "https://x8ki-letl-twmt.n7.xano.io/api:subject-crud"  # Grupo de API "Subject CRUD"
 TASK_API_URL = "https://x8ki-letl-twmt.n7.xano.io/api:Zb1x7tiT"  # Grupo de API "Academic Tasks"
 DASHBOARD_API_URL = "https://x8ki-letl-twmt.n7.xano.io/api:5sx9vVEG"  # Grupo de API "Dashboard"
+MEMBERS_API_URL = "https://x8ki-letl-twmt.n7.xano.io/api:yLunpObv"  # Grupo de API "Members & Accounts"
 
 # --- Status de Tarefas ---
 STATUS_LABELS = {
@@ -111,6 +112,108 @@ def get_current_user():
             return response.json()
         except requests.exceptions.RequestException as e2:
             return None
+
+@st.cache_data(ttl=60)
+def _check_token_expired(token):
+    """Faz a chamada de rede de fato; cacheada por token para não disparar
+    uma requisição a cada rerender do Streamlit nem misturar o resultado
+    entre sessões de usuários diferentes."""
+    try:
+        response = requests.get(f"{XANO_API_URL}/auth/me", headers={"Authorization": f"Bearer {token}"})
+        return response.status_code in (401, 403)
+    except requests.exceptions.RequestException:
+        return False
+
+def is_session_expired():
+    """Verifica se o token de autenticação atual expirou ou foi revogado.
+
+    Só retorna True para falhas de autenticação (401/403); erros de rede
+    não derrubam a sessão.
+    """
+    token = st.session_state.get('auth_token')
+    if not token:
+        return False
+    return _check_token_expired(token)
+
+def update_profile(name=None, email=None):
+    """Atualiza nome/e-mail do usuário autenticado (PATCH /user/edit_profile)."""
+    try:
+        payload = {}
+        if name:
+            payload["name"] = name
+        if email:
+            payload["email"] = email
+        response = requests.patch(f"{MEMBERS_API_URL}/user/edit_profile", json=payload, headers=get_headers())
+        response.raise_for_status()
+        st.cache_data.clear()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        error_message = "Erro ao atualizar perfil."
+        if e.response is not None:
+            try:
+                error_message = e.response.json().get('message', e.response.text)
+            except json.JSONDecodeError:
+                error_message = e.response.text
+        st.error(f"Erro ao atualizar perfil: {error_message}")
+        return None
+
+def request_password_reset(email):
+    """Solicita o envio do código de redefinição de senha por e-mail (POST /reset/request-reset-link)."""
+    try:
+        response = requests.post(f"{XANO_API_URL}/reset/request-reset-link", json={"email": email})
+        response.raise_for_status()
+        return True
+    except requests.exceptions.RequestException as e:
+        error_message = "Não foi possível enviar o código de redefinição."
+        if e.response is not None:
+            try:
+                error_message = e.response.json().get('message', e.response.text)
+            except json.JSONDecodeError:
+                error_message = e.response.text
+        st.error(f"Erro: {error_message}")
+        return False
+
+def confirm_password_reset(email, code, password, confirm_password):
+    """Confirma o código de redefinição recebido por e-mail e grava a nova senha
+    em uma única chamada (POST /reset/confirm-code). Não exige autenticação: o
+    código enviado por e-mail é a prova de identidade."""
+    try:
+        payload = {
+            "email": email,
+            "code": code,
+            "password": password,
+            "confirm_password": confirm_password,
+        }
+        response = requests.post(f"{XANO_API_URL}/reset/confirm-code", json=payload)
+        response.raise_for_status()
+        return True
+    except requests.exceptions.RequestException as e:
+        error_message = "Código inválido ou expirado."
+        if e.response is not None:
+            try:
+                error_message = e.response.json().get('message', e.response.text)
+            except json.JSONDecodeError:
+                error_message = e.response.text
+        st.error(f"Erro: {error_message}")
+        return False
+
+def update_password(password, confirm_password, token):
+    """Define uma nova senha usando o token informado (POST /reset/update_password)."""
+    try:
+        payload = {"password": password, "confirm_password": confirm_password}
+        headers = {"Authorization": f"Bearer {token}"}
+        response = requests.post(f"{XANO_API_URL}/reset/update_password", json=payload, headers=headers)
+        response.raise_for_status()
+        return True
+    except requests.exceptions.RequestException as e:
+        error_message = "Não foi possível atualizar a senha."
+        if e.response is not None:
+            try:
+                error_message = e.response.json().get('message', e.response.text)
+            except json.JSONDecodeError:
+                error_message = e.response.text
+        st.error(f"Erro: {error_message}")
+        return False
 
 # --- Funções de API ---
 

@@ -1,10 +1,13 @@
 import streamlit as st
-from utils.api_client import get_current_user
+from utils.api_client import get_current_user, update_profile, update_password
 
 def render_perfil_page():
     """Renderiza a página de Perfil do Usuário."""
     st.title("👤 Meu Perfil")
-    
+
+    if 'show_change_password_form' not in st.session_state:
+        st.session_state.show_change_password_form = False
+
     # Tentar atualizar dados do perfil do Xano usando GET /auth/me
     user_data = get_current_user()
     if user_data:
@@ -31,7 +34,26 @@ def render_perfil_page():
                 st.metric("✅ Cargo da Conta", current_user.get('role', 'N/A'))
         
         st.divider()
-        
+
+        # ========== SEÇÃO: EDITAR PERFIL ==========
+        st.subheader("✏️ Editar Perfil")
+
+        with st.form("form_edit_profile", border=True):
+            edited_name = st.text_input("Nome", value=current_user.get('name', ''))
+            edited_email = st.text_input("E-mail", value=current_user.get('email', ''))
+
+            if st.form_submit_button("💾 Salvar Alterações", type="primary"):
+                if not edited_name.strip() or not edited_email.strip():
+                    st.error("❌ Nome e e-mail não podem ficar vazios.")
+                else:
+                    result = update_profile(name=edited_name, email=edited_email)
+                    if result:
+                        st.session_state.user_data = result
+                        st.success("✅ Perfil atualizado com sucesso!")
+                        st.rerun()
+
+        st.divider()
+
         # ========== SEÇÃO: INFORMAÇÕES ADICIONAIS ==========
         st.subheader("ℹ️ Informações Adicionais")
         
@@ -66,12 +88,27 @@ def render_perfil_page():
         
         with col_sec1:
             if st.button("🔑 Alterar Senha", key="btn_change_password", use_container_width=True):
-                st.info("🔄 Funcionalidade de alteração de senha será implementada em breve.")
-        
+                st.session_state.show_change_password_form = not st.session_state.show_change_password_form
+
         with col_sec2:
             if st.button("🔒 Fazer Login em Outro Lugar", key="btn_logout_other", use_container_width=True):
                 st.info("Você será desconectado de todos os outros dispositivos.")
-        
+
+        if st.session_state.show_change_password_form:
+            with st.form("form_change_password", border=True):
+                new_password = st.text_input("Nova Senha", type="password")
+                confirm_password = st.text_input("Confirmar Nova Senha", type="password")
+
+                if st.form_submit_button("✅ Confirmar Nova Senha", type="primary"):
+                    if not new_password or not confirm_password:
+                        st.error("❌ Preencha os dois campos de senha.")
+                    elif new_password != confirm_password:
+                        st.error("❌ As senhas não correspondem.")
+                    elif update_password(new_password, confirm_password, st.session_state.auth_token):
+                        st.session_state.show_change_password_form = False
+                        st.success("✅ Senha alterada com sucesso!")
+                        st.rerun()
+
         st.divider()
         
         # ========== SEÇÃO: REFRESH DE DADOS ==========

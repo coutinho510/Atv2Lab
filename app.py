@@ -1,5 +1,11 @@
 import streamlit as st
-from utils.api_client import login_user, register_user
+from utils.api_client import (
+    login_user,
+    register_user,
+    request_password_reset,
+    confirm_password_reset,
+    is_session_expired,
+)
 from views.disciplinas_page import render_disciplinas_page
 from views.dashboard_page import render_dashboard_page
 from views.tarefas_page import render_tarefas_page
@@ -28,8 +34,13 @@ if not st.session_state.auth_token:
     # --- BARRA LATERAL (SIDEBAR) - Acesso ---
     st.sidebar.title("🎓 Edutrack-ai")
     st.sidebar.divider()
-    opcao_acesso = st.sidebar.radio("Acesso", ["🔐 Login", "📝 Registro"])
-    st.session_state.auth_mode = "login" if opcao_acesso == "🔐 Login" else "register"
+    opcao_acesso = st.sidebar.radio("Acesso", ["🔐 Login", "📝 Registro", "🔁 Esqueci a Senha"])
+    if opcao_acesso == "🔐 Login":
+        st.session_state.auth_mode = "login"
+    elif opcao_acesso == "📝 Registro":
+        st.session_state.auth_mode = "register"
+    else:
+        st.session_state.auth_mode = "reset"
 
     st.title("🎓 Edutrack-ai")
     st.markdown("### Sistema de Gerenciamento Acadêmico")
@@ -59,7 +70,7 @@ if not st.session_state.auth_token:
         st.info("Não tem uma conta? Clique em 'Registrar' acima para criar uma.")
     
     # --- MODO: REGISTRO ---
-    else:
+    elif st.session_state.auth_mode == "register":
         st.subheader("📝 Criar Conta")
         
         with st.form("form_register", clear_on_submit=False):
@@ -87,11 +98,53 @@ if not st.session_state.auth_token:
         
         st.info("Já tem uma conta? Clique em 'Login' acima para entrar.")
 
+    # --- MODO: ESQUECI A SENHA ---
+    else:
+        st.subheader("🔁 Redefinir Senha")
+        st.markdown("**Passo 1:** informe seu e-mail para receber um código de 6 dígitos.")
+
+        with st.form("form_request_reset", clear_on_submit=False):
+            reset_email = st.text_input("E-mail")
+
+            if st.form_submit_button("📧 Enviar Código", type="primary", use_container_width=True):
+                if reset_email:
+                    if request_password_reset(reset_email):
+                        st.success("✅ Código de redefinição enviado! Confira seu e-mail.")
+                else:
+                    st.error("Por favor, informe o e-mail.")
+
+        st.divider()
+        st.markdown("**Passo 2:** informe o código recebido por e-mail e defina sua nova senha.")
+
+        with st.form("form_complete_reset", clear_on_submit=False):
+            code_email = st.text_input("E-mail", key="reset_code_email")
+            reset_code = st.text_input("Código recebido por e-mail (6 dígitos)")
+            new_password = st.text_input("Nova Senha", type="password", key="reset_new_password")
+            confirm_new_password = st.text_input("Confirmar Nova Senha", type="password", key="reset_confirm_password")
+
+            if st.form_submit_button("🔐 Redefinir Senha", use_container_width=True):
+                if not all([code_email, reset_code, new_password, confirm_new_password]):
+                    st.error("Por favor, preencha todos os campos.")
+                elif new_password != confirm_new_password:
+                    st.error("As senhas não correspondem.")
+                else:
+                    if confirm_password_reset(code_email, reset_code, new_password, confirm_new_password):
+                        st.success("✅ Senha redefinida com sucesso! Clique em 'Login' acima para entrar.")
+
+        st.info("Já tem uma conta? Clique em 'Login' acima para entrar.")
+
 else:
     # ==============================================================================
     # SEÇÃO PRINCIPAL - Usuario Autenticado
     # ==============================================================================
-    
+
+    if is_session_expired():
+        st.session_state.auth_token = None
+        st.session_state.user_data = None
+        st.session_state.editing_subject = None
+        st.warning("⏰ Sua sessão expirou. Faça login novamente.")
+        st.rerun()
+
     # --- BARRA LATERAL (SIDEBAR) ---
     st.sidebar.title("🎓 Edutrack-ai")
     
