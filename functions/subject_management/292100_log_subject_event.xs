@@ -83,6 +83,7 @@ function "subject_management/log_subject_event" {
         // Create event_log record
         // Create event_log record for subject event
         db.add event_log {
+          enforce_hidden_fields = false
           data = {
             created_at: "now"
             user_id   : $input.user_id

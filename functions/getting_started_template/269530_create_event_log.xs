@@ -5,9 +5,6 @@ function "Getting Started Template/create_event_log" {
     // Unique identifier for the user who performed the action.
     int user_id
   
-    // Unique identifier for the account associated with the event.
-    int account_id
-  
     // A description of the action performed by the user (e.g., 'login', 'created_invoice').
     text action
   
@@ -21,7 +18,7 @@ function "Getting Started Template/create_event_log" {
       data = {
         created_at: "now"
         user_id   : $input.user_id
-        account_id: $input.account_id
+        account_id: null
         action    : $input.action
         metadata  : $input.metadata
       }
