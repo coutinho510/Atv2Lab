@@ -1,0 +1,120 @@
+from datetime import date, timedelta
+
+import pandas as pd
+import streamlit as st
+from utils.api_client import get_subjects, get_tasks, task_due_date_str, STATUS_LABELS
+
+
+def render_relatorios_page():
+    """Renderiza a página de Relatórios e Progresso."""
+    st.title("📈 Relatórios e Progresso")
+    st.markdown("Histórico de tarefas por período, progresso por disciplina e exportação dos seus dados.")
+
+    subjects = get_subjects() or []
+    tasks = get_tasks() or []
+
+    # ==================================================
+    # HISTÓRICO DE TAREFAS POR PERÍODO
+    # ==================================================
+    st.subheader("📋 Histórico de Tarefas por Período")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        data_inicio = st.date_input("De", value=date.today() - timedelta(days=90), key="relatorio_data_inicio")
+    with col2:
+        data_fim = st.date_input("Até", value=date.today(), key="relatorio_data_fim")
+
+    tarefas_no_periodo = []
+    for task in tasks:
+        task_date_str = task_due_date_str(task)
+        if not task_date_str:
+            continue
+        try:
+            task_date = date.fromisoformat(task_date_str)
+        except ValueError:
+            continue
+        if data_inicio <= task_date <= data_fim:
+            tarefas_no_periodo.append(task)
+
+    if not tarefas_no_periodo:
+        st.info("ℹ️ Nenhuma tarefa encontrada no período selecionado.")
+    else:
+        tabela = pd.DataFrame([
+            {
+                "Disciplina": t.get('subject_name') or 'Sem disciplina',
+                "Título": t.get('title', 'Sem título'),
+                "Status": STATUS_LABELS.get(t.get('status'), t.get('status')),
+                "Data": task_due_date_str(t),
+            }
+            for t in sorted(tarefas_no_periodo, key=task_due_date_str)
+        ])
+        st.dataframe(tabela, use_container_width=True, hide_index=True)
+
+    st.divider()
+
+    # ==================================================
+    # PROGRESSO POR DISCIPLINA
+    # ==================================================
+    st.subheader("📊 Progresso por Disciplina")
+
+    if not subjects:
+        st.info("ℹ️ Cadastre disciplinas e tarefas para acompanhar o progresso aqui.")
+    else:
+        for subject in subjects:
+            subject_tasks = [t for t in tasks if t.get('subject_id') == subject.get('id')]
+            total = len(subject_tasks)
+            concluidas = sum(1 for t in subject_tasks if t.get('status') == 'completa')
+            pct = (concluidas / total) if total else 0.0
+
+            with st.container(border=True):
+                st.markdown(f"**{subject.get('name', 'Sem nome')}**")
+                st.progress(pct, text=f"{concluidas}/{total} tarefas concluídas ({pct * 100:.0f}%)")
+
+    st.divider()
+
+    # ==================================================
+    # EXPORTAÇÃO DE DADOS (CSV)
+    # ==================================================
+    st.subheader("📥 Exportar Dados")
+
+    col_exp1, col_exp2 = st.columns(2)
+
+    with col_exp1:
+        disciplinas_csv = pd.DataFrame([
+            {
+                "Nome": s.get('name'),
+                "Professor": s.get('professor'),
+                "Carga Horária": s.get('cargahoraria'),
+            }
+            for s in subjects
+        ]).to_csv(index=False).encode('utf-8-sig')
+
+        st.download_button(
+            "📥 Exportar Disciplinas (CSV)",
+            data=disciplinas_csv,
+            file_name="disciplinas.csv",
+            mime="text/csv",
+            use_container_width=True,
+            disabled=not subjects,
+        )
+
+    with col_exp2:
+        tarefas_csv = pd.DataFrame([
+            {
+                "Disciplina": t.get('subject_name'),
+                "Título": t.get('title'),
+                "Descrição": t.get('description'),
+                "Status": STATUS_LABELS.get(t.get('status'), t.get('status')),
+                "Data": task_due_date_str(t),
+            }
+            for t in tasks
+        ]).to_csv(index=False).encode('utf-8-sig')
+
+        st.download_button(
+            "📥 Exportar Tarefas (CSV)",
+            data=tarefas_csv,
+            file_name="tarefas.csv",
+            mime="text/csv",
+            use_container_width=True,
+            disabled=not tasks,
+        )

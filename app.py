@@ -4,6 +4,7 @@ from views.disciplinas_page import render_disciplinas_page
 from views.dashboard_page import render_dashboard_page
 from views.tarefas_page import render_tarefas_page
 from views.perfil_page import render_perfil_page
+from views.relatorios_page import render_relatorios_page
 
 # --- Configuração da Página Original ---
 st.set_page_config(page_title="Edutrack-ai", page_icon="🎓", layout="wide")
@@ -103,7 +104,7 @@ else:
     st.sidebar.divider()
     
     # Menu de navegação
-    opcao_menu = st.sidebar.radio("Navegar", ["Dashboard", "Disciplinas", "Tarefas", "Perfil"])
+    opcao_menu = st.sidebar.radio("Navegar", ["Dashboard", "Disciplinas", "Tarefas", "Relatórios", "Perfil"])
     
     st.sidebar.divider()
     
@@ -132,7 +133,13 @@ else:
     # ==============================================================================
     elif opcao_menu == "Tarefas":
         render_tarefas_page() #
-    
+
+    # ==============================================================================
+    # OPÇÃO: RELATÓRIOS
+    # ==============================================================================
+    elif opcao_menu == "Relatórios":
+        render_relatorios_page()
+
     # ==============================================================================
     # OPÇÃO: PERFIL
     # ==============================================================================
