@@ -17,12 +17,26 @@ STATUS_LABELS = {
 }
 STATUS_OPTIONS = list(STATUS_LABELS.keys())
 
+def task_due_date_str(task):
+    """Converte o due_date (timestamp epoch ms retornado pela API) para 'YYYY-MM-DD'.
+
+    O endpoint recebe a data como texto no campo `data`, mas devolve o valor
+    já gravado no campo real da tabela (`due_date`, timestamp em epoch ms).
+    """
+    due_date_ms = task.get('due_date')
+    if not due_date_ms:
+        return ''
+    try:
+        return datetime.fromtimestamp(due_date_ms / 1000).strftime('%Y-%m-%d')
+    except (ValueError, TypeError, OSError):
+        return ''
+
 def is_task_overdue(task):
     """Retorna True se a tarefa tem prazo vencido e ainda não foi concluída."""
-    if task.get('status_tarefa') == 'completa':
+    if task.get('status') == 'completa':
         return False
 
-    task_date = task.get('data')
+    task_date = task_due_date_str(task)
     if not task_date:
         return False
 
