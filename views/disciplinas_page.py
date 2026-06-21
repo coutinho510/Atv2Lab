@@ -20,6 +20,7 @@ from utils.api_client import (
     check_duplicate_subject,
     search_subjects_by_name,
 )
+from utils.theme import subject_color
 
 
 def render_disciplinas_page():
@@ -70,11 +71,15 @@ def render_disciplinas_page():
                 subject_cargahoraria = subject.get('cargahoraria', 'Carga horária não informada')
                 created_at = subject.get('created_at', '')
 
+                color = subject_color(subject)
                 with st.container(border=True):
                     col1, col2 = st.columns([3, 1])
 
                     with col1:
-                        st.markdown(f"### 📘 {subject_name}")
+                        st.markdown(
+                            f"### <span style='color:{color};'>●</span> {subject_name}",
+                            unsafe_allow_html=True,
+                        )
                         st.markdown(f"👨‍🏫 **Professor:** {subject_professor}")
                         st.markdown(f"⏱️ **Carga Horária:** {subject_cargahoraria}h")
                         if created_at:
@@ -146,7 +151,10 @@ def render_disciplinas_page():
                     subject_cargahoraria = result.get('cargahoraria', 'Carga horária não informada')
 
                     with st.container(border=True):
-                        st.markdown(f"### 📘 {subject_name}")
+                        st.markdown(
+                            f"### <span style='color:{subject_color(result)};'>●</span> {subject_name}",
+                            unsafe_allow_html=True,
+                        )
                         col1, col2 = st.columns(2)
                         with col1:
                             st.markdown(f"👨‍🏫 **Professor:** {subject_professor}")

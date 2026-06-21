@@ -24,6 +24,7 @@ from utils.api_client import (
     STATUS_LABELS,
     STATUS_OPTIONS,
 )
+from utils.theme import subject_color_by_id
 
 
 def render_tarefas_page():
@@ -109,6 +110,7 @@ def render_task_card(task, subjects, key_prefix=""):
     data = task_due_date_str(task)
     status_tarefa = task.get('status_tarefa', 'pendente')
     subject_name = task.get('subject_name') or 'Disciplina não encontrada'
+    color = subject_color_by_id(task.get('subject_id'), subjects)
 
     with st.container(border=True):
         col1, col2 = st.columns([3, 1])
@@ -118,7 +120,10 @@ def render_task_card(task, subjects, key_prefix=""):
                 st.markdown(f"### 📌 {title} :red[🔴 Atrasada]")
             else:
                 st.markdown(f"### 📌 {title}")
-            st.markdown(f"📘 **Disciplina:** {subject_name}")
+            st.markdown(
+                f"<span style='color:{color};'>●</span> **Disciplina:** {subject_name}",
+                unsafe_allow_html=True,
+            )
             if description:
                 st.markdown(f"📝 **Descrição:** {description}")
             if data:

@@ -3,6 +3,7 @@ from datetime import date, timedelta
 import pandas as pd
 import streamlit as st
 from utils.api_client import get_subjects, get_tasks, task_due_date_str, STATUS_LABELS
+from utils.theme import subject_color
 
 
 def render_relatorios_page():
@@ -67,7 +68,11 @@ def render_relatorios_page():
             pct = (concluidas / total) if total else 0.0
 
             with st.container(border=True):
-                st.markdown(f"**{subject.get('name', 'Sem nome')}**")
+                st.markdown(
+                    f"<span style='color:{subject_color(subject)};'>●</span> "
+                    f"**{subject.get('name', 'Sem nome')}**",
+                    unsafe_allow_html=True,
+                )
                 st.progress(pct, text=f"{concluidas}/{total} tarefas concluídas ({pct * 100:.0f}%)")
 
     st.divider()
