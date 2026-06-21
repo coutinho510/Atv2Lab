@@ -15,6 +15,39 @@ from views.relatorios_page import render_relatorios_page
 # --- Configuração da Página Original ---
 st.set_page_config(page_title="Edutrack-ai", page_icon="🎓", layout="wide")
 
+# --- Identidade Visual: fonte e wordmark do app ---
+st.markdown(
+    """
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        html, body, [class*="css"] { font-family: 'Poppins', sans-serif; }
+        div[data-testid="stSidebar"] button[kind="primary"],
+        div.stButton > button[kind="primary"] {
+            background: linear-gradient(135deg, #A66CFF 0%, #4D96FF 100%);
+            border: none;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
+def render_logo(container=None, size="1.3em"):
+    """Renderiza o wordmark do app. Por padrão na barra lateral."""
+    target = container or st.sidebar
+    target.markdown(
+        f"""
+        <h2 style="margin-bottom:0;">
+            <span style="font-size:{size};">🎓</span>
+            <span style="background: linear-gradient(135deg, #A66CFF 0%, #4D96FF 100%);
+                  -webkit-background-clip: text; background-clip: text; color: transparent;
+                  font-weight: 700;">EduTrack AI</span>
+        </h2>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 # --- Estado da Sessão ---
 if 'editing_subject' not in st.session_state:
     st.session_state.editing_subject = None
@@ -33,7 +66,7 @@ if 'auth_mode' not in st.session_state:
 # ==============================================================================
 if not st.session_state.auth_token:
     # --- BARRA LATERAL (SIDEBAR) - Acesso ---
-    st.sidebar.title("🎓 Edutrack-ai")
+    render_logo()
     st.sidebar.divider()
     opcao_acesso = st.sidebar.radio("Acesso", ["🔐 Login", "📝 Registro", "🔁 Esqueci a Senha"])
     if opcao_acesso == "🔐 Login":
@@ -43,7 +76,7 @@ if not st.session_state.auth_token:
     else:
         st.session_state.auth_mode = "reset"
 
-    st.title("🎓 Edutrack-ai")
+    render_logo(container=st, size="2em")
     st.markdown("### Sistema de Gerenciamento Acadêmico")
     st.divider()
 
@@ -147,7 +180,7 @@ else:
         st.rerun()
 
     # --- BARRA LATERAL (SIDEBAR) ---
-    st.sidebar.title("🎓 Edutrack-ai")
+    render_logo()
     
     # Exibir info do usuário logado
     if st.session_state.user_data:

@@ -6,6 +6,7 @@ from utils.api_client import (
     task_due_date_str,
     STATUS_LABELS,
 )
+from utils.theme import subject_color
 
 
 def render_dashboard_page():
@@ -69,7 +70,11 @@ def render_dashboard_page():
             pct = concluidas / total
             icone = "✅" if pct == 1 else "🔄" if pct > 0 else "⏳"
             with st.container(border=True):
-                st.markdown(f"**{icone} {subject.get('name', 'Sem nome')}**")
+                st.markdown(
+                    f"<span style='color:{subject_color(subject)};'>●</span> "
+                    f"**{icone} {subject.get('name', 'Sem nome')}**",
+                    unsafe_allow_html=True,
+                )
                 st.progress(pct, text=f"{concluidas}/{total} tarefas concluídas ({pct * 100:.0f}%)")
 
     st.divider()
