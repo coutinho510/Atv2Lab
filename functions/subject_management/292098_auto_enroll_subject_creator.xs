@@ -15,7 +15,6 @@ function "subject_management/auto_enroll_subject_creator" {
   
     // Account ID for auditing purposes
     int account_id {
-      
       table = "account"
     }
   }
@@ -50,6 +49,7 @@ function "subject_management/auto_enroll_subject_creator" {
           if ($existing_enrollment == null) {
             // Create admin enrollment for creator
             db.add subject_enrollment {
+              enforce_hidden_fields = false
               data = {
                 subject_id  : $input.subject_id
                 user_id     : $input.user_id
