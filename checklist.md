@@ -66,7 +66,7 @@ Criar uma tela inicial com visão geral do sistema logo após o login, exibindo:
 - [x] Permitir associar um semestre/período a cada disciplina para melhor organização.
 - [x] Adicionar campo de prioridade nas tarefas (Baixa, Média, Alta).
 - [x] Exibir o progresso de cada disciplina com base nas tarefas concluídas.
-- [ ] Permitir arquivar disciplinas concluídas sem excluí-las.
+- [x] Permitir arquivar disciplinas concluídas sem excluí-las.
 
 ---
 
