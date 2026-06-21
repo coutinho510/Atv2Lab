@@ -23,6 +23,8 @@ from utils.api_client import (
     task_due_date_str,
     STATUS_LABELS,
     STATUS_OPTIONS,
+    PRIORITY_LABELS,
+    PRIORITY_OPTIONS,
 )
 from utils.theme import subject_color_by_id
 
@@ -109,6 +111,7 @@ def render_task_card(task, subjects, key_prefix=""):
     description = task.get('description', '')
     data = task_due_date_str(task)
     status_tarefa = task.get('status_tarefa', 'pendente')
+    prioridade = task.get('prioridade', 'media')
     subject_name = task.get('subject_name') or 'Disciplina não encontrada'
     color = subject_color_by_id(task.get('subject_id'), subjects)
 
@@ -129,6 +132,7 @@ def render_task_card(task, subjects, key_prefix=""):
             if data:
                 st.markdown(f"📅 **Data:** {data}")
             st.markdown(f"**Status:** {STATUS_LABELS.get(status_tarefa, status_tarefa)}")
+            st.markdown(f"**Prioridade:** {PRIORITY_LABELS.get(prioridade, prioridade)}")
 
         with col2:
             st.markdown("**Ações:**")
@@ -199,6 +203,13 @@ def render_create_task_form(subjects):
             index=0
         )
 
+        task_priority = st.selectbox(
+            "Prioridade",
+            options=PRIORITY_OPTIONS,
+            format_func=lambda p: PRIORITY_LABELS[p],
+            index=PRIORITY_OPTIONS.index("media")
+        )
+
         submitted = st.form_submit_button(
             "✅ Criar Tarefa",
             use_container_width=True,
@@ -217,6 +228,7 @@ def render_create_task_form(subjects):
                 task_date.isoformat(),
                 description=task_description,
                 status_tarefa=task_status,
+                prioridade=task_priority,
             )
 
             if result:
@@ -248,6 +260,9 @@ def render_edit_task_form(task, subjects, key_prefix=""):
 
     current_status = task.get('status_tarefa', 'pendente')
     status_index = STATUS_OPTIONS.index(current_status) if current_status in STATUS_OPTIONS else 0
+
+    current_priority = task.get('prioridade', 'media')
+    priority_index = PRIORITY_OPTIONS.index(current_priority) if current_priority in PRIORITY_OPTIONS else PRIORITY_OPTIONS.index("media")
 
     st.markdown("### ✏️ Editar Tarefa")
 
@@ -281,6 +296,13 @@ def render_edit_task_form(task, subjects, key_prefix=""):
             index=status_index
         )
 
+        edited_priority = st.selectbox(
+            "Prioridade",
+            options=PRIORITY_OPTIONS,
+            format_func=lambda p: PRIORITY_LABELS[p],
+            index=priority_index
+        )
+
         col1, col2 = st.columns(2)
 
         with col1:
@@ -308,6 +330,7 @@ def render_edit_task_form(task, subjects, key_prefix=""):
                 edited_date.isoformat(),
                 description=edited_description,
                 status_tarefa=edited_status,
+                prioridade=edited_priority,
             )
 
             if result:

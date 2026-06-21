@@ -18,6 +18,14 @@ STATUS_LABELS = {
 }
 STATUS_OPTIONS = list(STATUS_LABELS.keys())
 
+# --- Prioridade de Tarefas ---
+PRIORITY_LABELS = {
+    "baixa": "🟢 Baixa",
+    "media": "🟡 Média",
+    "alta": "🔴 Alta",
+}
+PRIORITY_OPTIONS = list(PRIORITY_LABELS.keys())
+
 def task_due_date_str(task):
     """Retorna a data da tarefa no formato 'YYYY-MM-DD'.
 
@@ -316,7 +324,7 @@ def create_subject(name, professor, cargahoraria):
         st.error(f"Erro ao criar disciplina: {e.response.text}")
         return None
 
-def create_task(subject_id, title, data, description="", status_tarefa="pendente"):
+def create_task(subject_id, title, data, description="", status_tarefa="pendente", prioridade="media"):
     """Cria uma nova tarefa (POST /add-task)."""
     try:
         payload = {
@@ -325,6 +333,7 @@ def create_task(subject_id, title, data, description="", status_tarefa="pendente
             "description": description,
             "data": data,
             "status_tarefa": status_tarefa,
+            "prioridade": prioridade,
         }
         response = requests.post(f"{TASK_API_URL}/add-task", json=payload, headers=get_headers())
         response.raise_for_status()
@@ -334,7 +343,7 @@ def create_task(subject_id, title, data, description="", status_tarefa="pendente
         st.error(f"Erro ao criar tarefa: {e.response.text}")
         return None
 
-def update_task(task_id, subject_id, title, data, description="", status_tarefa="pendente"):
+def update_task(task_id, subject_id, title, data, description="", status_tarefa="pendente", prioridade="media"):
     """Atualiza os dados de uma tarefa (PUT /edit-task/{task_id})."""
     try:
         payload = {
@@ -343,6 +352,7 @@ def update_task(task_id, subject_id, title, data, description="", status_tarefa=
             "description": description,
             "data": data,
             "status_tarefa": status_tarefa,
+            "prioridade": prioridade,
         }
         response = requests.put(f"{TASK_API_URL}/edit-task/{task_id}", json=payload, headers=get_headers())
         response.raise_for_status()
