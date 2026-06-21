@@ -9,7 +9,7 @@ query "edit-task/{academic_tasks_id}" verb=PUT {
     int subject_id?
     text title?
     text description?
-    timestamp data?
+    text data?
     enum status_tarefa? {
       values = ["pendente", "completa", "em_progresso"]
     }
@@ -21,24 +21,23 @@ query "edit-task/{academic_tasks_id}" verb=PUT {
       field_name = "id"
       field_value = $input.academic_tasks_id
     } as $task
-
+  
     precondition ($task != null) {
       error_type = "notfound"
       error = "Tarefa não encontrada."
     }
-
+  
     // Verifica se o usuário é o dono da tarefa
     precondition ($task.user_id == $auth.id) {
       error_type = "accessdenied"
       error = "Você não tem permissão para editar esta tarefa."
     }
-
+  
     // Constrói o objeto de atualização dinamicamente
-    // Os nomes de coluna reais sao due_date/status (nao data/status_tarefa)
     var $updates {
       value = {}
     }
-
+  
     conditional {
       if ($input.subject_id != null) {
         var.update $updates {
@@ -47,7 +46,7 @@ query "edit-task/{academic_tasks_id}" verb=PUT {
         }
       }
     }
-
+  
     conditional {
       if ($input.title != null) {
         var.update $updates {
@@ -55,7 +54,7 @@ query "edit-task/{academic_tasks_id}" verb=PUT {
         }
       }
     }
-
+  
     conditional {
       if ($input.description != null) {
         var.update $updates {
@@ -64,24 +63,24 @@ query "edit-task/{academic_tasks_id}" verb=PUT {
         }
       }
     }
-
+  
     conditional {
       if ($input.data != null) {
         var.update $updates {
-          value = $updates|set:"due_date":$input.data
+          value = $updates|set:"data":$input.data
         }
       }
     }
-
+  
     conditional {
       if ($input.status_tarefa != null) {
         var.update $updates {
           value = $updates
-            |set:"status":$input.status_tarefa
+            |set:"status_tarefa":$input.status_tarefa
         }
       }
     }
-
+  
     // Aplica as atualizações se houver alguma
     db.patch academic_tasks {
       field_name = "id"

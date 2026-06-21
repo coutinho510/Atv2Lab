@@ -43,7 +43,7 @@ def render_relatorios_page():
             {
                 "Disciplina": t.get('subject_name') or 'Sem disciplina',
                 "Título": t.get('title', 'Sem título'),
-                "Status": STATUS_LABELS.get(t.get('status'), t.get('status')),
+                "Status": STATUS_LABELS.get(t.get('status_tarefa'), t.get('status_tarefa')),
                 "Data": task_due_date_str(t),
             }
             for t in sorted(tarefas_no_periodo, key=task_due_date_str)
@@ -63,7 +63,7 @@ def render_relatorios_page():
         for subject in subjects:
             subject_tasks = [t for t in tasks if t.get('subject_id') == subject.get('id')]
             total = len(subject_tasks)
-            concluidas = sum(1 for t in subject_tasks if t.get('status') == 'completa')
+            concluidas = sum(1 for t in subject_tasks if t.get('status_tarefa') == 'completa')
             pct = (concluidas / total) if total else 0.0
 
             with st.container(border=True):
@@ -104,7 +104,7 @@ def render_relatorios_page():
                 "Disciplina": t.get('subject_name'),
                 "Título": t.get('title'),
                 "Descrição": t.get('description'),
-                "Status": STATUS_LABELS.get(t.get('status'), t.get('status')),
+                "Status": STATUS_LABELS.get(t.get('status_tarefa'), t.get('status_tarefa')),
                 "Data": task_due_date_str(t),
             }
             for t in tasks

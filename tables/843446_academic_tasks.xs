@@ -22,12 +22,6 @@ table academic_tasks {
     // Detailed task description
     text description?
   
-    // Task due date
-    timestamp due_date?
-  
-    // Task status (pending, in-progress, completed)
-    text status?=pending
-  
     // Account ID for multi-tenancy
     int account_id {
       table = "account"
@@ -37,6 +31,11 @@ table academic_tasks {
     timestamp created_at?=now {
       visibility = "private"
     }
+  
+    text data? filters=trim
+    enum status_tarefa?=pendente {
+      values = ["pendente", "completa", "em_progresso"]
+    }
   }
 
   index = [
@@ -44,7 +43,6 @@ table academic_tasks {
     {type: "btree", field: [{name: "subject_id", op: "asc"}]}
     {type: "btree", field: [{name: "user_id", op: "asc"}]}
     {type: "btree", field: [{name: "account_id", op: "asc"}]}
-    {type: "btree", field: [{name: "due_date", op: "asc"}]}
   ]
 
   tags = ["xano:quick-start"]

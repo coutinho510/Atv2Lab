@@ -16,7 +16,7 @@ def render_dashboard_page():
     tasks = get_dashboard_tasks() or []
 
     total_active_subjects = sum(1 for s in subjects if s.get('status', 'ativo') == 'ativo')
-    total_pending_tasks = sum(1 for t in tasks if t.get('status') != 'completa')
+    total_pending_tasks = sum(1 for t in tasks if t.get('status_tarefa') != 'completa')
 
     # Progresso geral: média da taxa de conclusão de tarefas de cada disciplina.
     # Ex: 3 disciplinas com 1 tarefa cada, sendo 1 completa => (1 + 0 + 0) / 3 = 33%
@@ -24,7 +24,7 @@ def render_dashboard_page():
     for subject in subjects:
         subject_tasks = [t for t in tasks if t.get('subject_id') == subject.get('id')]
         if subject_tasks:
-            concluidas = sum(1 for t in subject_tasks if t.get('status') == 'completa')
+            concluidas = sum(1 for t in subject_tasks if t.get('status_tarefa') == 'completa')
             progresso_disciplinas.append((subject, concluidas, len(subject_tasks)))
 
     if progresso_disciplinas:
@@ -52,7 +52,7 @@ def render_dashboard_page():
     else:
         status_cols = st.columns(len(STATUS_LABELS))
         for col, (status, label) in zip(status_cols, STATUS_LABELS.items()):
-            count = sum(1 for t in tasks if t.get('status') == status)
+            count = sum(1 for t in tasks if t.get('status_tarefa') == status)
             col.metric(label, count)
 
     st.divider()
@@ -80,7 +80,7 @@ def render_dashboard_page():
     st.subheader("📅 Próximas Tarefas")
 
     pendentes = sorted(
-        (t for t in tasks if t.get('status') != 'completa' and task_due_date_str(t)),
+        (t for t in tasks if t.get('status_tarefa') != 'completa' and task_due_date_str(t)),
         key=task_due_date_str
     )
 
@@ -88,7 +88,7 @@ def render_dashboard_page():
         st.info("ℹ️ Nenhuma tarefa pendente. 🎉")
     else:
         for task in pendentes[:5]:
-            label = STATUS_LABELS.get(task.get('status'), task.get('status'))
+            label = STATUS_LABELS.get(task.get('status_tarefa'), task.get('status_tarefa'))
             badge = " · :red[🔴 Atrasada]" if is_task_overdue(task) else ""
             st.markdown(
                 f"- **{task.get('title', 'Sem título')}** "

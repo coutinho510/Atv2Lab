@@ -107,7 +107,7 @@ def render_task_card(task, subjects, key_prefix=""):
     title = task.get('title', 'Sem título')
     description = task.get('description', '')
     data = task_due_date_str(task)
-    status_tarefa = task.get('status', 'pendente')
+    status_tarefa = task.get('status_tarefa', 'pendente')
     subject_name = task.get('subject_name') or 'Disciplina não encontrada'
 
     with st.container(border=True):
@@ -241,7 +241,7 @@ def render_edit_task_form(task, subjects, key_prefix=""):
     except (ValueError, TypeError):
         current_date = date.today()
 
-    current_status = task.get('status', 'pendente')
+    current_status = task.get('status_tarefa', 'pendente')
     status_index = STATUS_OPTIONS.index(current_status) if current_status in STATUS_OPTIONS else 0
 
     st.markdown("### ✏️ Editar Tarefa")
