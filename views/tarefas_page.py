@@ -20,6 +20,7 @@ from utils.api_client import (
     update_task,
     delete_task,
     is_task_overdue,
+    task_due_date_str,
     STATUS_LABELS,
     STATUS_OPTIONS,
 )
@@ -105,8 +106,8 @@ def render_task_card(task, subjects, key_prefix=""):
     task_id = task.get('id')
     title = task.get('title', 'Sem título')
     description = task.get('description', '')
-    data = task.get('data', '')
-    status_tarefa = task.get('status_tarefa', 'pendente')
+    data = task_due_date_str(task)
+    status_tarefa = task.get('status', 'pendente')
     subject_name = task.get('subject_name') or 'Disciplina não encontrada'
 
     with st.container(border=True):
@@ -236,11 +237,11 @@ def render_edit_task_form(task, subjects, key_prefix=""):
             break
 
     try:
-        current_date = datetime.strptime(task.get('data', ''), "%Y-%m-%d").date()
+        current_date = datetime.strptime(task_due_date_str(task), "%Y-%m-%d").date()
     except (ValueError, TypeError):
         current_date = date.today()
 
-    current_status = task.get('status_tarefa', 'pendente')
+    current_status = task.get('status', 'pendente')
     status_index = STATUS_OPTIONS.index(current_status) if current_status in STATUS_OPTIONS else 0
 
     st.markdown("### ✏️ Editar Tarefa")
